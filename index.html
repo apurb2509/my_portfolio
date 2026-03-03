@@ -103,8 +103,39 @@
           <div class="hero-footer-symbols">
             <img src="/images/global/symbols.png" alt="" />
           </div>
-          <div class="hero-footer-scroll-down">
-            <p class="mn"><a href="https://drive.google.com/file/d/1Z6e843Zi2PJMBGwdyLd1eSSTqnbIb6or/view?usp=sharing" target="_blank" class="resume-link"> View Resume</a></p>
+          <div class="hero-footer-scroll-down" style="display:flex; justify-content:center; align-items:center;">
+
+            <a 
+              href="https://drive.google.com/file/d/1Z6e843Zi2PJMBGwdyLd1eSSTqnbIb6or/view?usp=sharing" 
+              target="_blank" 
+              style="
+                display:inline-block;
+                padding:10px 22px;
+                border-radius:40px;
+                background-color:#ff2e2e;
+                color:white;
+                text-decoration:none;
+                font-weight:600;
+                animation: pulseRed 1.8s infinite;
+                transition: all 0.3s ease;
+              "
+            >
+              View Resume
+            </a>
+          
+            <style>
+              @keyframes pulseRed {
+                0% { box-shadow: 0 0 0 0 rgba(255, 46, 46, 0.7); }
+                70% { box-shadow: 0 0 0 18px rgba(255, 46, 46, 0); }
+                100% { box-shadow: 0 0 0 0 rgba(255, 46, 46, 0); }
+              }
+          
+              .hero-footer-scroll-down a:hover {
+                background-color: #ff0000;
+                transform: scale(1.05);
+              }
+            </style>
+          
           </div>
           <div class="hero-footer-tags">
             <p class="mn">Showcase Mode: ON </p>
@@ -210,7 +241,7 @@
               <p>Your Vision. My Expertise.</p>
               <div class="services-header-title">
                 <h1>Full-stack development</h1>
-                <h1>& AI Solutions</h1>
+                <h1>with AI Solutions</h1>
               </div>
               <div class="services-header-arrow-icon">
                 <h1>&#8595;</h1>
