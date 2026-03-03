@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
     currentImageIndex =
       currentImageIndex >= totalImages ? 1 : currentImageIndex + 1;
     // Update hero image source
-    heroImg.src = `/images/work-items/work-item-${currentImageIndex}.jpg`;
+    heroImg.src = `/images/work-items/work-item-${currentImageIndex}.png`;
   }, 250);
 
   // Initialize animations with ScrollTrigger

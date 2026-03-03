@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const imageParticleCount = 10; // Number of particle images
     const imagePaths = Array.from(
       { length: imageParticleCount },
-      (_, i) => `/images/work-items/work-item-${i + 1}.jpg` // Paths to images (work-item-1.jpg to work-item-10.jpg)
+      (_, i) => `/images/work-items/work-item-${i + 1}.png` // Paths to images (work-item-1.jpg to work-item-10.jpg)
     );
   
     // Preload images to avoid delays

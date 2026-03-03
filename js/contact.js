@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Define image paths for trail
   const images = Array.from(
     { length: config.imageCount },
-    (_, i) => `/images/work-items/work-item-${i + 1}.jpg` // Paths to images (work-item-1.jpg to work-item-8.jpg)
+    (_, i) => `/images/work-items/work-item-${i + 1}.png` // Paths to images (work-item-1.jpg to work-item-8.jpg)
   );
   const trail = []; // Store active trail images
 
