@@ -15,9 +15,132 @@
     <link rel="stylesheet" href="/css/contact.css" />
     <link rel="stylesheet" href="/css/footer.css" />
 
+    <style>
+      /* ══════════════════════════════════════
+         CUSTOM CURSOR — full brown theme
+      ══════════════════════════════════════ */
+      * { cursor: none !important; }
+
+      #cursor-dot {
+        position: fixed;
+        top: 0; left: 0;
+        width: 9px; height: 9px;
+        border-radius: 50%;
+        background: #2e2218;          /* deep espresso brown */
+        pointer-events: none;
+        z-index: 10000;
+        transform: translate(-50%, -50%);
+        transition: width 0.2s ease, height 0.2s ease,
+                    background 0.2s ease, opacity 0.2s ease;
+        mix-blend-mode: multiply;
+      }
+
+      #cursor-ring {
+        position: fixed;
+        top: 0; left: 0;
+        width: 34px; height: 34px;
+        border-radius: 50%;
+        border: 1.5px solid rgba(46, 34, 24, 0.4);
+        pointer-events: none;
+        z-index: 9998;
+        transform: translate(-50%, -50%);
+        transition: width 0.28s ease, height 0.28s ease,
+                    border-color 0.28s ease;
+        will-change: transform;
+      }
+
+      /* On hover: dot grows & deepens, ring widens — all brown */
+      body.cursor-hover #cursor-dot {
+        width: 15px; height: 15px;
+        background: #5a3e28;          /* medium walnut */
+      }
+      body.cursor-hover #cursor-ring {
+        width: 52px; height: 52px;
+        border-color: rgba(90, 62, 40, 0.35);
+      }
+
+      /* ══════════════════════════════════════
+         HOVER INTERACTIONS on interactive els
+      ══════════════════════════════════════ */
+
+      /* Featured title wrappers — subtle lift + underline streak */
+      .featured-title-wrapper {
+        transition: transform 0.3s cubic-bezier(0.22, 0.68, 0, 1.2),
+                    letter-spacing 0.3s ease;
+        will-change: transform;
+      }
+      .featured-title-wrapper:hover {
+        transform: translateX(6px);
+      }
+      .featured-title-wrapper:hover .featured-title {
+        letter-spacing: 0.04em;
+      }
+
+      /* Service cards — warm shadow lift */
+      .service-card {
+        transition: transform 0.35s cubic-bezier(0.22, 0.68, 0, 1.2),
+                    box-shadow 0.35s ease;
+        will-change: transform;
+      }
+      .service-card:hover {
+        transform: translateY(-6px) scale(1.012);
+        box-shadow: 0 18px 40px rgba(46, 34, 24, 0.14),
+                    0  6px 14px rgba(46, 34, 24, 0.10);
+      }
+
+      /* Nav links — colour shift */
+      .nav-item p a {
+        transition: color 0.22s ease, letter-spacing 0.22s ease;
+        display: inline-block;
+      }
+      .nav-item p a:hover {
+        color: #6b4c32;
+        letter-spacing: 0.06em;
+      }
+
+      /* Footer links */
+      .footer-col a {
+        transition: color 0.2s ease, padding-left 0.2s ease;
+        display: inline-block;
+      }
+      .footer-col a:hover {
+        color: #6b4c32;
+        padding-left: 4px;
+      }
+
+      /* About bio paragraph — gentle highlight on hover */
+      .about-hero-bio p.ss {
+        transition: color 0.25s ease;
+      }
+      .about-hero-bio p.ss:hover {
+        color: #3d2c1a;
+      }
+
+      /* ══════════════════════════════════════
+         AMBIENT FLOATING ELEMENTS (CSS-only)
+         Small decorative specks that drift —
+         these complement the JS canvas layer
+      ══════════════════════════════════════ */
+
+      /* Floating grain overlay on body for extra texture depth */
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 9995;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
+        opacity: 0.55;
+      }
+    </style>
   </head>
   <body>
-    <!-- page transition  -->
+
+    <!-- Custom cursor elements -->
+    <div id="cursor-dot"></div>
+    <div id="cursor-ring"></div>
+
+    <!-- page transition -->
     <div class="transition">
       <div class="transition-overlay overlay-1"></div>
       <div class="transition-overlay overlay-2"></div>
@@ -27,69 +150,66 @@
     </div>
 
     <div class="page home-page">
-        <!-- nav -->
-        <nav>
-          <div class="logo">
-            <div class="logo-container">
-              <p class="mn"><a href="/">A ✦ S ✦ B</a></p>
-            </div>
-          </div>
-          <div class="menu-toggle-btn">
-            <div class="menu-toggle-btn-wrapper">
-              <p class="mn open-label">Menu</p>
-              <p class="mn close-label">Close</p>
-            </div>
-          </div>
-        </nav>
-  
-        <div class="nav-overlay">
-          <div class="nav-items">
-            <div class="nav-item active">
-              <p><a href="/">Home</a></p>
-            </div>
 
-            <!-- Might add in future but disabled for now - Apurb -->
-            <div class="nav-item">
-              <p><a href="/work">Work</a></p>
+      <!-- nav -->
+      <nav>
+        <div class="logo">
+          <div class="logo-container">
+            <p class="mn"><a href="/">A ✦ S ✦ B</a></p>
+          </div>
+        </div>
+        <div class="menu-toggle-btn">
+          <div class="menu-toggle-btn-wrapper">
+            <p class="mn open-label">Menu</p>
+            <p class="mn close-label">Close</p>
+          </div>
+        </div>
+      </nav>
+
+      <div class="nav-overlay">
+        <div class="nav-items">
+          <div class="nav-item active">
+            <p><a href="/">Home</a></p>
+          </div>
+          <div class="nav-item">
+            <p><a href="/work">Work</a></p>
+          </div>
+          <div class="nav-item">
+            <p><a href="/about">About</a></p>
+          </div>
+          <div class="nav-item">
+            <p><a href="/contact">Contact</a></p>
+          </div>
+        </div>
+        <div class="nav-footer">
+          <div class="nav-footer-item">
+            <div class="nav-footer-item-header">
+              <p class="mn">Find Me</p>
             </div>
-            <div class="nav-item">
-              <p><a href="/about">About</a></p>
-            </div>
-            <div class="nav-item">
-              <p><a href="/contact">Contact</a></p>
+            <div class="nav-footer-item-copy">
+              <p class="mn"><a href="https://github.com/apurb2509" target="_blank">Github</a></p>
+              <p class="mn"><a href="https://www.linkedin.com/in/apurbsusobhitbaba/" target="_blank">LinkedIn</a></p>
             </div>
           </div>
-          <div class="nav-footer">
-            <div class="nav-footer-item">
-              <div class="nav-footer-item-header">
-                <p class="mn">Find Me</p>
-              </div>
-              <div class="nav-footer-item-copy">
-                <p class="mn"><a href="https://github.com/apurb2509" target="_blank">Github</a></p>
-                <p class="mn"><a href="https://www.linkedin.com/in/apurbsusobhitbaba/" target="_blank">LinkedIn</a></p>
-              </div>
+          <div class="nav-footer-item">
+            <div class="nav-footer-item-copy">
+              <p class="mn"></p>
             </div>
-            <div class="nav-footer-item">
-              <div class="nav-footer-item-copy">
-                <p class="mn"></p>
-              </div>
+          </div>
+          <div class="nav-footer-item">
+            <div class="nav-footer-item-header">
+              <p class="mn">Get in Touch</p>
             </div>
-            <div class="nav-footer-item">
-              <div class="nav-footer-item-header">
-                <p class="mn">Get in Touch</p>
-              </div>
-              <div class="nav-footer-item-copy">
-                <p class="mn">
-                  <a href="mailto:apurb.s.baba@gmail.com" target="_blank"
-                    >apurb.s.baba@gmail.com</a
-                  >
-                </p>
-              </div>
+            <div class="nav-footer-item-copy">
+              <p class="mn">
+                <a href="mailto:apurb.s.baba@gmail.com" target="_blank">apurb.s.baba@gmail.com</a>
+              </p>
             </div>
           </div>
         </div>
-             
-        <!-- home - hero -->
+      </div>
+
+      <!-- home - hero -->
       <section class="hero">
         <div class="hero-header-wrapper">
           <div class="hero-header hero-header-1">
@@ -104,10 +224,9 @@
             <img src="/images/global/symbols.png" alt="" />
           </div>
           <div class="hero-footer-scroll-down" style="display:flex; justify-content:center; align-items:center;">
-
-            <a 
-              href="https://drive.google.com/file/d/1Z6e843Zi2PJMBGwdyLd1eSSTqnbIb6or/view?usp=sharing" 
-              target="_blank" 
+            <a
+              href="https://drive.google.com/file/d/1Z6e843Zi2PJMBGwdyLd1eSSTqnbIb6or/view?usp=sharing"
+              target="_blank"
               style="
                 display:inline-block;
                 padding:10px 22px;
@@ -122,23 +241,20 @@
             >
               View Resume
             </a>
-          
             <style>
               @keyframes pulseRed {
-                0% { box-shadow: 0 0 0 0 rgba(255, 46, 46, 0.7); }
-                70% { box-shadow: 0 0 0 18px rgba(255, 46, 46, 0); }
-                100% { box-shadow: 0 0 0 0 rgba(255, 46, 46, 0); }
+                0%   { box-shadow: 0 0 0 0   rgba(255, 46, 46, 0.7); }
+                70%  { box-shadow: 0 0 0 18px rgba(255, 46, 46, 0);   }
+                100% { box-shadow: 0 0 0 0   rgba(255, 46, 46, 0);   }
               }
-          
               .hero-footer-scroll-down a:hover {
                 background-color: #ff0000;
                 transform: scale(1.05);
               }
             </style>
-          
           </div>
           <div class="hero-footer-tags">
-            <p class="mn">Showcase Mode: ON </p>
+            <p class="mn">Showcase Mode: ON</p>
           </div>
         </div>
       </section>
@@ -150,40 +266,22 @@
         </div>
       </section>
 
-
-
-<!-- about - about hero -->
-<section class="about-hero">
-    <div class="about-hero-header">
-      <h1 style="color:#483C32">Hi, I'm</h1>
-      <h1 style="color:#483C32">Apurb</h1>
-    </div>
-    <div class="about-hero-bio">
-      <p class="ss">
-        I am an Electronics and Instrumentation Engineering UG student at NIT Rourkela, graduating in 2027. I utilize Java as my primary language for coding, while building backends with Node.js and Express.js. I remain flexible with Python and FastAPI, focusing on GenAI and RAG using AWS. I am a January Hackathon Cohort Winner and N6T Hacakthon Top 5 Finalist, also a Top 1% ranker in a DSA Course, organised on CodeDamn Platform.
-      </p>
-      <p class="mn">Code / Debug / Sleep / Repeat</p>
-    </div>
-    <div class="about-hero-portrait">
-      <img
-        src="/images/services-header/portrait.jpg"
-        alt="Apurb Susobhit Baba"
-      />
-    </div>
-  </section>
-
-
-
-
-
-
-
-
-
-
-
-
-      
+      <!-- about - about hero -->
+      <section class="about-hero">
+        <div class="about-hero-header">
+          <h1 style="color:#483C32">Hi, I'm</h1>
+          <h1 style="color:#483C32">Apurb</h1>
+        </div>
+        <div class="about-hero-bio">
+          <p class="ss">
+            I am an Electronics and Instrumentation Engineering UG student at NIT Rourkela, graduating in 2027. I utilize Java as my primary language for coding, while building backends with Node.js and Express.js. I remain flexible with Python and FastAPI, focusing on GenAI and RAG using AWS. I am a January Hackathon Cohort Winner and N6T Hackathon Top 5 Finalist, also a Top 1% ranker in a DSA Course, organised on CodeDamn Platform.
+          </p>
+          <p class="mn">Code / Debug / Sleep / Repeat</p>
+        </div>
+        <div class="about-hero-portrait">
+          <img src="/images/services-header/portrait.jpg" alt="Apurb Susobhit Baba" />
+        </div>
+      </section>
 
       <!-- home - featured work -->
       <section class="featured-work">
@@ -225,114 +323,60 @@
         </div>
       </section>
 
-      
+      <!-- home - services header -->
+      <section class="services-header">
+        <div class="services-header-content">
+          <div class="services-profile-icon">
+            <img src="/images/services-header/portrait.jpg" alt="Apurb Susobhit Baba's Portrait" />
+          </div>
+          <p>Your Vision. My Expertise.</p>
+          <div class="services-header-title">
+            <h1>Full-stack development</h1>
+            <h1>with AI Solutions</h1>
+          </div>
+          <div class="services-header-arrow-icon">
+            <h1>&#8595;</h1>
+          </div>
+        </div>
+      </section>
 
-
-
-           <!-- home - services header -->
-           <section class="services-header">
-            <div class="services-header-content">
-              <div class="services-profile-icon">
-                <img
-                  src="/images/services-header/portrait.jpg"
-                  alt="Apurb Susobhit Baba's Portrait"
-                />
-              </div>
-              <p>Your Vision. My Expertise.</p>
-              <div class="services-header-title">
-                <h1>Full-stack development</h1>
-                <h1>with AI Solutions</h1>
-              </div>
-              <div class="services-header-arrow-icon">
-                <h1>&#8595;</h1>
-              </div>
+      <!-- home - services/skills section -->
+      <section class="services">
+        <div class="service-card" id="service-card-1">
+          <div class="service-card-inner">
+            <div class="service-card-content"><h1>Frontend Development</h1></div>
+            <div class="service-card-img">
+              <img src="/images/services/service-1.jpg" alt="Front-End Development" />
             </div>
-          </section>
-
-
-
-
-
-
-
-
-
-          
-    
-          <!-- home - services/skills section -->
-          <section class="services">
-            <div class="service-card" id="service-card-1">
-              <div class="service-card-inner">
-                <div class="service-card-content">
-                  <h1>Frontend Development </h1>
-                </div>
-                <div class="service-card-img">
-                  <img
-                    src="/images/services/service-1.jpg"
-                    alt="Front-End Development"
-                  />
-                </div>
-              </div>
+          </div>
+        </div>
+        <div class="service-card" id="service-card-2">
+          <div class="service-card-inner">
+            <div class="service-card-content"><h1>Backend Development</h1></div>
+            <div class="service-card-img">
+              <img src="/images/services/service-2.jpg" alt="Backend Development" />
             </div>
-            <div class="service-card" id="service-card-2">
-              <div class="service-card-inner">
-                <div class="service-card-content">
-                  <h1>Backend Development</h1>
-                </div>
-                <div class="service-card-img">
-                  <img
-                    src="/images/services/service-2.jpg"
-                    alt="Backend Development"
-                  />
-                </div>
-              </div>
+          </div>
+        </div>
+        <div class="service-card" id="service-card-3">
+          <div class="service-card-inner">
+            <div class="service-card-content"><h1>Generative AI & RAG</h1></div>
+            <div class="service-card-img">
+              <img src="/images/services/service-3.jpg" alt="Generative AI & RAG" />
             </div>
-            <div class="service-card" id="service-card-3">
-              <div class="service-card-inner">
-                <div class="service-card-content">
-                  <h1>Generative AI & RAG</h1>
-                </div>
-                <div class="service-card-img">
-                  <img
-                    src="/images/services/service-3.jpg"
-                    alt="Generative AI & RAG"
-                  />
-                </div>
-              </div>
+          </div>
+        </div>
+        <div class="service-card" id="service-card-4">
+          <div class="service-card-inner">
+            <div class="service-card-content"><h1>Cloud and DevOps</h1></div>
+            <div class="service-card-img">
+              <img src="/images/services/service-4.jpg" alt="Cloud and DevOps" />
             </div>
-            <div class="service-card" id="service-card-4">
-              <div class="service-card-inner">
-                <div class="service-card-content">
-                  <h1>Cloud and DevOps</h1>
-                </div>
-                <div class="service-card-img">
-                  <img
-                    src="/images/services/service-4.jpg"
-                    alt="Cloud and DevOps"
-                  />
-                </div>
-              </div>
-            </div>
-          </section>
+          </div>
+        </div>
+      </section>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-          
-
-
-        <!-- home - contact cta -->
+      <!-- home - contact cta -->
       <section class="contact-cta">
         <div class="contact-button">
           <a href="/contact"></a>
@@ -343,76 +387,50 @@
         </div>
       </section>
 
-<!-- home - footer -->
-<footer>
-    <div class="footer-container">
-      <div class="footer-symbols footer-symbols-1">
-        <img src="/images/global/s6.png" alt="" />
-        <img src="/images/global/s6.png" alt="" />
-      </div>
-      <div class="footer-symbols footer-symbols-2">
-        <img src="/images/global/s6.png" alt="" />
-        <img src="/images/global/s6.png" alt="" />
-      </div>
-      <div class="footer-header">
-        <h1>Apurb Susobhit Baba</h1>
-      </div>
-      <div class="footer-row">
-        <div class="footer-col">
-          <p>Explore</p>
-          <p><a href="/home">Home</a></p>
-          <p><a href="/contact">Contact</a></p>
+      <!-- home - footer -->
+      <footer>
+        <div class="footer-container">
+          <div class="footer-symbols footer-symbols-1">
+            <img src="/images/global/s6.png" alt="" />
+            <img src="/images/global/s6.png" alt="" />
+          </div>
+          <div class="footer-symbols footer-symbols-2">
+            <img src="/images/global/s6.png" alt="" />
+            <img src="/images/global/s6.png" alt="" />
+          </div>
+          <div class="footer-header">
+            <h1>Apurb Susobhit Baba</h1>
+          </div>
+          <div class="footer-row">
+            <div class="footer-col">
+              <p>Explore</p>
+              <p><a href="/home">Home</a></p>
+              <p><a href="/contact">Contact</a></p>
+            </div>
+            <div class="footer-col">
+              <p>Creative Hub</p>
+              <p><a href="_blank" target="_blank">View Portfolio</a></p>
+              <p><a href="_blank" target="_blank">View Blog</a></p>
+            </div>
+            <div class="footer-col">
+              <p>Connect</p>
+              <p><a href="https://www.linkedin.com/in/apurbsusobhitbaba/" target="_blank">LinkedIn</a></p>
+              <p><a href="https://github.com/apurb2509" target="_blank">Github</a></p>
+              <p><a href="https://x.com/4purb" target="_blank">Twitter</a></p>
+            </div>
+            <div class="footer-col"></div>
+          </div>
+          <div class="copyright-info">
+            <p class="mn">© - Apurb Susobhit Baba // 2026</p>
+            <p class="mn"></p>
+          </div>
+          <div class="explosion-container"></div>
         </div>
-        <div class="footer-col">
-          <p>Creative Hub
-          </p>
-          <p><a href="_blank" target="_blank">View Portfolio</a></p>
-          <p><a href="_blank" target="_blank">View Blog</a></p>
-        </div>
-        <div class="footer-col">
-          <p>Connect</p>
-          <p>
-            <a href="https://www.linkedin.com/in/apurbsusobhitbaba/" target="_blank">LinkedIn</a>
-          </p>
-          <p>
-            <a href="https://github.com/apurb2509" target="_blank"
-              >Github</a
-            >
-          </p>
-          <p>
-            <a href="https://x.com/4purb" target="_blank"
-              >Twitter</a
-            >
-          </p>
-        </div>
-        <div class="footer-col">
-          <!-- <p>Extras</p>
-          <p>
-            <a href="https://www.awwwards.com/winner-list/" target="_blank"
-              >Design Archive</a>
-          </p>
-          
-          <p><a href="https://www.pillarstack.com/" target="_blank"
-            > Basic References</a></p>
-        
-            <p><a href="https://blog.olivierlarose.com/" target="_blank"
-                >Animation References</a></p> -->
-    
+      </footer>
 
-        </div>
-        
-      </div>
-      <div class="copyright-info">
-        <p class="mn">© - Apurb Susobhit Baba // 2026</p>
-        <p class="mn"></p>
-      </div>
-      <div class="explosion-container"></div>
-    </div>
-  </footer>
+    </div><!-- .page -->
 
-
-
-    </div>
+    <!-- ── Original scripts (unchanged) ── -->
     <script type="module" src="/js/transition.js"></script>
     <script type="module" src="/js/lenis-scroll.js"></script>
     <script type="module" src="/js/menu.js"></script>
@@ -421,7 +439,48 @@
     <script type="module" src="/js/services.js"></script>
     <script type="module" src="/js/footer.js"></script>
     <script type="module" src="/js/about.js"></script>
-    
-    
+
+    <!-- ── NEW: Ambient background animations ── -->
+    <script src="/js/ambient-animations.js"></script>
+
+    <!-- ── NEW: Darker zebra hover ripple ── -->
+    <script src="/js/mouse-hover.js"></script>
+
+    <!-- ── NEW: Custom cursor logic ── -->
+    <script>
+      (function () {
+        const dot  = document.getElementById('cursor-dot');
+        const ring = document.getElementById('cursor-ring');
+
+        let ringX = 0, ringY = 0;
+        let mouseX = 0, mouseY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+          mouseX = e.clientX;
+          mouseY = e.clientY;
+          dot.style.left = mouseX + 'px';
+          dot.style.top  = mouseY + 'px';
+        });
+
+        // Lagging ring
+        (function animateRing() {
+          ringX += (mouseX - ringX) * 0.09;
+          ringY += (mouseY - ringY) * 0.09;
+          ring.style.left = ringX + 'px';
+          ring.style.top  = ringY + 'px';
+          requestAnimationFrame(animateRing);
+        })();
+
+        // Cursor state on interactive elements
+        const interactives = document.querySelectorAll(
+          'a, button, .service-card, .featured-title-wrapper, .menu-toggle-btn'
+        );
+        interactives.forEach(el => {
+          el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+          el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+        });
+      })();
+    </script>
+
   </body>
 </html>
