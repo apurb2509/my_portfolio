@@ -21,17 +21,26 @@
       ══════════════════════════════════════ */
       * { cursor: none !important; }
 
+      .page {
+  position: relative;
+  z-index: 1;
+}
+
+body::before {
+  z-index: 1; /* was 9995 — change just this one value */
+}
+
       #cursor-dot {
         position: fixed;
         top: 0; left: 0;
         width: 9px; height: 9px;
         border-radius: 50%;
-        background: #2e2218;          /* deep espresso brown */
+        background: #2e2218;
         pointer-events: none;
         z-index: 10000;
-        transform: translate(-50%, -50%);
-        transition: width 0.2s ease, height 0.2s ease,
-                    background 0.2s ease, opacity 0.2s ease;
+        /* translate is the ONLY position — no top/left changes at runtime */
+        will-change: transform;
+        transition: width 0.18s ease, height 0.18s ease, background 0.18s ease;
         mix-blend-mode: multiply;
       }
 
@@ -43,16 +52,14 @@
         border: 1.5px solid rgba(46, 34, 24, 0.4);
         pointer-events: none;
         z-index: 9998;
-        transform: translate(-50%, -50%);
-        transition: width 0.28s ease, height 0.28s ease,
-                    border-color 0.28s ease;
         will-change: transform;
+        /* NO transition on transform — JS lerp handles smoothness */
+        transition: width 0.28s ease, height 0.28s ease, border-color 0.28s ease;
       }
 
-      /* On hover: dot grows & deepens, ring widens — all brown */
       body.cursor-hover #cursor-dot {
         width: 15px; height: 15px;
-        background: #5a3e28;          /* medium walnut */
+        background: #5a3e28;
       }
       body.cursor-hover #cursor-ring {
         width: 52px; height: 52px;
@@ -121,6 +128,11 @@
          Small decorative specks that drift —
          these complement the JS canvas layer
       ══════════════════════════════════════ */
+
+      /* ── Grain texture overlay ── */
+      body {
+        background-color: #d4c9bb; /* slightly darker warm greige — matches bg-pattern base */
+      }
 
       /* Floating grain overlay on body for extra texture depth */
       body::before {
@@ -202,7 +214,7 @@
             </div>
             <div class="nav-footer-item-copy">
               <p class="mn">
-                <a href="mailto:apurb.s.baba@gmail.com" target="_blank">apurb.s.baba@gmail.com</a>
+                <a href="/cdn-cgi/l/email-protection#4627363334246835682427242706212b272f2a6825292b" target="_blank"><span class="__cf_email__" data-cfemail="7e1f0e0b0c1c500d501c1f1c1f3e19131f1712501d1113">[email&#160;protected]</span></a>
               </p>
             </div>
           </div>
@@ -431,7 +443,7 @@
     </div><!-- .page -->
 
     <!-- ── Original scripts (unchanged) ── -->
-    <script type="module" src="/js/transition.js"></script>
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="module" src="/js/transition.js"></script>
     <script type="module" src="/js/lenis-scroll.js"></script>
     <script type="module" src="/js/menu.js"></script>
     <script type="module" src="/js/hero.js"></script>
@@ -439,6 +451,9 @@
     <script type="module" src="/js/services.js"></script>
     <script type="module" src="/js/footer.js"></script>
     <script type="module" src="/js/about.js"></script>
+
+    <!-- ── NEW: Flowing background pattern (replaces flat beige) ── -->
+    <script src="/js/bg-pattern.js"></script>
 
     <!-- ── NEW: Ambient background animations ── -->
     <script src="/js/ambient-animations.js"></script>
@@ -452,22 +467,23 @@
         const dot  = document.getElementById('cursor-dot');
         const ring = document.getElementById('cursor-ring');
 
-        let ringX = 0, ringY = 0;
-        let mouseX = 0, mouseY = 0;
+        // Both start off-screen
+        let mouseX = -200, mouseY = -200;
+        let ringX  = -200, ringY  = -200;
 
+        // DOT: set via transform only — no left/top changes, zero reflow
         document.addEventListener('mousemove', (e) => {
           mouseX = e.clientX;
           mouseY = e.clientY;
-          dot.style.left = mouseX + 'px';
-          dot.style.top  = mouseY + 'px';
+          // Snap dot instantly — transform keeps it on compositor thread
+          dot.style.transform = `translate(calc(${mouseX}px - 50%), calc(${mouseY}px - 50%))`;
         });
 
-        // Lagging ring
+        // RING: lerp follows with GPU transform — silky, no reflow
         (function animateRing() {
-          ringX += (mouseX - ringX) * 0.09;
-          ringY += (mouseY - ringY) * 0.09;
-          ring.style.left = ringX + 'px';
-          ring.style.top  = ringY + 'px';
+          ringX += (mouseX - ringX) * 0.12;
+          ringY += (mouseY - ringY) * 0.12;
+          ring.style.transform = `translate(calc(${ringX}px - 50%), calc(${ringY}px - 50%))`;
           requestAnimationFrame(animateRing);
         })();
 
