@@ -128,7 +128,9 @@
   }
   
   .fp-card-hint {
-    align-self: flex-end;
+    position: absolute;
+    bottom: 1.2em;
+    right: 1.5em;
   }
   
   .fp-card-hint .mn {
