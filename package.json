@@ -1,7 +1,7 @@
 {
-    "name": "prashant-koirala-portfolio",
+    "name": "apurb-susobhit-baba-portfolio",
     "version": "1.0.0",
-    "description": "Prashant Koirala's Portfolio",
+    "description": "Apurb Susobhit Baba's Portfolio",
     "main": "index.js",
     "scripts": {
       "dev": "vite",
@@ -10,7 +10,7 @@
       "host": "vite --host"
     },
     "keywords": [],
-    "author": "Prashant Koirala",
+    "author": "Apurb Susobhit Baba",
     "license": "MIT",
     "dependencies": {
       "gsap": "^3.13.0",
