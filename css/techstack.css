@@ -6,7 +6,7 @@ File: css/techstack.css
 .tech-stack {
 position: relative;
 width: 100%;
-padding: 6em 2em 5em 2em;
+padding: 1em 2em 5em 2em;
 display: flex;
 flex-direction: column;
 align-items: center;
