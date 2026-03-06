@@ -165,23 +165,30 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Handle form submission with feedback
   const handleFormSubmit = (e) => {
-    e.preventDefault(); // Prevent default form submission
+    e.preventDefault();
     const form = e.target;
-    const submitBtn = form.querySelector(".submit-btn"); // Submit button
-    const successMessage = document.getElementById("successMessage"); // Success message element
-    submitBtn.style.transform = "translateY(-1px)"; // Slight button press effect
-    submitBtn.textContent = "Sending..."; // Update button text
-    submitBtn.disabled = true; // Disable button
-    setTimeout(() => {
-      form.reset(); // Reset form
-      submitBtn.textContent = "Send Message"; // Restore button text
-      submitBtn.disabled = false; // Enable button
-      submitBtn.style.transform = ""; // Reset button style
-      successMessage.classList.add("show"); // Show success message
-      setTimeout(() => {
-        successMessage.classList.remove("show"); // Hide after 5s
-      }, 5000);
-    }, 1500); // Simulate form submission delay
+    const submitBtn = form.querySelector(".submit-btn");
+    const successMessage = document.getElementById("successMessage");
+  
+    submitBtn.textContent = "Sending...";
+    submitBtn.disabled = true;
+  
+    emailjs.sendForm("apurb_emailjs", "template_qemhv0x", form)
+    .then(() => {
+      return emailjs.sendForm("apurb_emailjs", "template_xkg0hsq", form);
+    })
+    .then(() => {
+      form.reset();
+      submitBtn.textContent = "Send Message";
+      submitBtn.disabled = false;
+      successMessage.classList.add("show");
+      setTimeout(() => successMessage.classList.remove("show"), 5000);
+    })
+    .catch((err) => {
+      console.error("EmailJS error:", err);
+      submitBtn.textContent = "Failed. Try again.";
+      submitBtn.disabled = false;
+    });
   };
 
   // Enhance form inputs with focus/blur animations
