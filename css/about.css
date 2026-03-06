@@ -2,12 +2,13 @@
 .about-hero {
   position: relative;
   width: 100vw;
-  height: 100svh;
+  min-height: 100svh;
   padding: 8em 2em 6em 2em;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
+  gap: 2em;
   background-color: var(--bg);
   color: var(--fg);
   overflow: hidden;
@@ -24,22 +25,30 @@
 .about-hero .about-hero-bio {
   text-align: center;
   width: 50%;
+  position: relative;
+  z-index: 20;
 }
 
 .about-hero .about-hero-portrait {
   position: absolute;
-  top: 55%;
+  top: 30%;
   left: 50%;
   transform: translate(-50%, -50%) rotate(10deg);
-  width: 15%;
+  width: 12%;
   aspect-ratio: 5/7;
   border-radius: 1em;
   overflow: hidden;
   border: 0.25em solid var(--accent3);
   outline: 0.25em solid var(--accent1);
+  z-index: 5;
 }
 
 .about-hero .about-hero-bio {
+  text-align: center;
+  width: 50%;
+  position: relative;
+  z-index: 20;
+  margin-top: 4em;
   display: flex;
   flex-direction: column;
   gap: 2em;
@@ -240,4 +249,27 @@
     gap: 2em;
     margin-bottom: 2em;
   }
+}
+
+.bio-typewriter {
+  display: block;
+  width: 100%;
+  word-wrap: break-word;
+  white-space: normal;
+  position: relative;
+  z-index: 10;
+}
+
+.bio-char {
+  color: rgba(72, 56, 38, 0.9);
+  transition: color 0.08s ease;
+}
+
+.bio-char.bio-char-current {
+  color: #ffffff;
+  text-shadow: 0 0 8px rgba(255,255,255,0.6);
+}
+
+.bio-char.bio-char-done {
+  color: rgba(72, 56, 38, 0.9);
 }

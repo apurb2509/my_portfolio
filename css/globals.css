@@ -197,3 +197,31 @@ p.mn {
     font-size: 3rem;
   }
 }
+
+/* Bio typewriter effect */
+.bio-typewriter {
+  display: block;
+  width: 100%;
+  word-wrap: break-word;
+  white-space: normal;
+  position: relative;
+  z-index: 20;
+}
+
+.bio-char {
+  color: rgba(72, 56, 38, 0.9);
+  transition: color 0.08s ease, transform 0.08s ease, font-size 0.08s ease;
+  display: inline-block;
+}
+
+.bio-char.bio-char-current {
+  color: rgba(72, 56, 38, 0.9);
+  transform: scale(1.5);
+  display: inline-block;
+  text-shadow: none;
+}
+
+.bio-char.bio-char-done {
+  color: rgba(72, 56, 38, 0.9);
+  transform: scale(1);
+}

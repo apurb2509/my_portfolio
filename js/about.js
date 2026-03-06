@@ -54,16 +54,20 @@ document.addEventListener("DOMContentLoaded", () => {
       // Portrait animation (if element exists)
       const portraitElement = document.querySelector(".about-hero-portrait");
       if (portraitElement) {
-        const portraitAnimation = gsap.to(".about-hero-portrait", {
-          y: -200, // Move up by 200px
-          rotation: -25, // Rotate -25 degrees
-          scrollTrigger: {
-            trigger: ".about-hero", // Trigger element
-            start: "top top", // Start when top of hero hits top of viewport
-            end: "bottom top", // End when bottom of hero hits top of viewport
-            scrub: 1, // Tie animation to scroll position
-          },
-        });
+        const portraitAnimation = gsap.fromTo(".about-hero-portrait", 
+          { x: 0, y: 0, rotation: 10 },
+          {
+            x: 450,
+            y: -60,
+            rotation: -15,
+            scrollTrigger: {
+              trigger: ".bio-typewriter",
+              start: "top 99%",
+              end: "bottom 50%",
+              scrub: 1,
+            },
+          }
+        );
         scrollTriggerInstances.push(portraitAnimation.scrollTrigger); // Store instance
       }
 
@@ -104,10 +108,10 @@ document.addEventListener("DOMContentLoaded", () => {
           y: -400, // Move up by 400px
           rotation: 120, // Rotate 120 degrees
           scrollTrigger: {
-            trigger: ".about-copy", // Trigger element
-            start: "top bottom", // Start when top of about-copy hits bottom of viewport
-            end: "bottom+=100% top", // End after scrolling 100% beyond bottom
-            scrub: 1, // Tie animation to scroll position
+            trigger: ".about-hero",
+            start: "top 80%",
+            end: "bottom 20%",
+            scrub: 1,
           },
         });
         scrollTriggerInstances.push(tag3Animation.scrollTrigger); // Store instance
