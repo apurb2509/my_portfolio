@@ -13,15 +13,15 @@ document.addEventListener("DOMContentLoaded", () => {
   
     // Configuration for particle behavior
     const config = {
-      gravity: 0.25, // Downward force applied to particles
-      friction: 0.99, // Slows down particle movement and rotation
-      imageSize: 150, // Size of particle images (px)
-      horizontalForce: 20, // Max horizontal velocity range
-      verticalForce: 15, // Initial upward velocity
-      rotationSpeed: 10, // Max rotation speed (degrees)
-      resetDelay: 500, // Delay before checking footer position (ms)
+      gravity: 1.5,
+      friction: 0.92,
+      imageSize: 150,
+      horizontalForce: 80,
+      verticalForce: 70,
+      rotationSpeed: 45,
+      resetDelay: 500,
     };
-  
+
     // Define particle images
     const imageParticleCount = 10; // Number of particle images
     const imagePaths = Array.from(
