@@ -21,15 +21,12 @@
     color: #483C32;
   }
   
-  /* Grid of 3 cards */
   .featured-projects-grid {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
     gap: 2em;
-    justify-content: center;
-    align-items: stretch;
     width: 100%;
     max-width: 1200px;
-    perspective: 1200px;
   }
   
   /* ── Card shell ── */
@@ -245,7 +242,7 @@
   /* ── Responsive ── */
   @media (max-width: 1000px) {
     .featured-projects-grid {
-      flex-direction: column;
+      grid-template-columns: 1fr;
       max-width: 480px;
     }
   
