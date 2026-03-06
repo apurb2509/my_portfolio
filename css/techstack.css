@@ -140,7 +140,7 @@ filter: drop-shadow(0 1px 1px rgba(0,0,0,0.10));
 }
 
 /* Subtle scroll-in reveal */
-.ts-category {
+/* .ts-category {
 opacity: 0;
 transform: translateY(28px);
 transition:
@@ -151,7 +151,7 @@ transition:
 .ts-category.ts-visible {
 opacity: 1;
 transform: translateY(0);
-}
+} */
 
 .ts-category:nth-child(1) { transition-delay: 0.00s; }
 .ts-category:nth-child(2) { transition-delay: 0.08s; }
@@ -180,3 +180,14 @@ transform: translateY(0);
  font-size: 1.9rem;
 }
 }
+
+/* Individual pill fly-in */
+.ts-pill {
+    opacity: 0;
+    transition: opacity 0.35s ease, transform 0.45s cubic-bezier(0.22, 0.68, 0, 1.2);
+  }
+  
+  .ts-pill.pill-visible {
+    opacity: 1;
+    transform: none !important;
+  }

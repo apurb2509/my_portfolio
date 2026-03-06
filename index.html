@@ -1096,5 +1096,62 @@ body::before {
   })();
   </script>
 
+<script>
+  (function () {
+    const pills = document.querySelectorAll('.ts-pill');
+    if (!pills.length) return;
+  
+    function assignRandomTransform(pill) {
+    const x = (Math.random() - 0.5) * 1400;
+    const y = (Math.random() - 0.5) * 900;
+    const rot = (Math.random() - 0.5) * 90;
+    pill.style.transition = 'none';
+    pill.style.transform = `translate(${x}px, ${y}px) rotate(${rot}deg)`;
+    pill.style.opacity = '0';
+  }
+  
+    function flyIn(pill, delay) {
+      setTimeout(() => {
+        pill.style.transition = 'opacity 0.35s ease, transform 0.45s cubic-bezier(0.22, 0.68, 0, 1.2)';
+        pill.style.transform = 'translate(0, 0) rotate(0deg)';
+        pill.style.opacity = '1';
+      }, delay);
+    }
+  
+    function flyOut(pill, delay) {
+    const x = (Math.random() - 0.5) * 1400;
+    const y = (Math.random() - 0.5) * 900;
+    const rot = (Math.random() - 0.5) * 90;
+    setTimeout(() => {
+      pill.style.transition = 'opacity 0.35s ease, transform 0.45s cubic-bezier(0.22, 0.68, 0, 1.2)';
+      pill.style.transform = `translate(${x}px, ${y}px) rotate(${rot}deg)`;
+      pill.style.opacity = '0';
+    }, delay);
+  }
+  
+    // Set all pills to random start position initially
+    pills.forEach(pill => assignRandomTransform(pill));
+  
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        const pillsInCategory = entry.target.querySelectorAll('.ts-pill');
+        if (entry.isIntersecting) {
+          // Fly in
+          pillsInCategory.forEach((pill, i) => {
+            flyIn(pill, i * 60);
+          });
+        } else {
+          // Fly out to random directions
+          pillsInCategory.forEach((pill, i) => {
+            flyOut(pill, i * 40);
+            setTimeout(() => assignRandomTransform(pill), i * 40 + 500);
+          });
+        }
+      });
+    }, { threshold: 0.9 });
+  
+    document.querySelectorAll('.ts-category').forEach(cat => observer.observe(cat));
+  })();
+  </script>
   </body>
 </html>
