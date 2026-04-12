@@ -1,204 +1,233 @@
+/* ═══════════════════════════════════════════════════
+   GLOBALS.CSS — Dark Tech Theme
+   Apurb Susobhit Baba Portfolio
+   ═══════════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+
 :root {
-  --bg: #d4c9bb;      /* darker warm greige — matches bg-pattern canvas base */
-  --bg2: #c4b8a8;
-  --fg: #141414;
-  --accent1: #ed6a5a;
-  --accent2: #f4f1bb;
-  --accent3: #9bc1bc;
-  --accent4: #5d576b;
+  /* ── Core Palette ── */
+  --bg:          #0a0a0f;
+  --bg2:         #111118;
+  --bg3:         #1a1a26;
+  --surface:     #16161f;
+  --surface2:    #1e1e2a;
+
+  /* ── Accents ── */
+  --violet:      #7c3aed;
+  --violet-light:#a855f7;
+  --violet-dim:  rgba(124, 58, 237, 0.15);
+  --cyan:        #06b6d4;
+  --cyan-light:  #22d3ee;
+  --cyan-dim:    rgba(6, 182, 212, 0.12);
+
+  /* ── Text ── */
+  --fg:          #f1f5f9;
+  --fg-muted:    #94a3b8;
+  --fg-subtle:   #475569;
+
+  /* ── Borders ── */
+  --border:      rgba(255, 255, 255, 0.07);
+  --border-accent: rgba(124, 58, 237, 0.35);
+
+  /* ── Gradients ── */
+  --grad-accent: linear-gradient(135deg, var(--violet), var(--cyan));
+  --grad-glow:   linear-gradient(135deg, rgba(124,58,237,0.2), rgba(6,182,212,0.2));
+
+  /* ── Shadows ── */
+  --shadow-sm:   0 2px 8px rgba(0,0,0,0.4);
+  --shadow-md:   0 8px 32px rgba(0,0,0,0.5);
+  --shadow-glow: 0 0 40px rgba(124,58,237,0.25);
 }
 
-* {
+/* ── Reset ── */
+*, *::before, *::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: auto; /* Lenis handles this */
 }
 
 body {
   background-color: var(--bg);
   color: var(--fg);
   overflow-x: hidden;
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body::-webkit-scrollbar {
-  width: 0;
+  width: 4px;
+}
+body::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+body::-webkit-scrollbar-thumb {
+  background: var(--violet);
+  border-radius: 2px;
 }
 
+/* ── Images ── */
 img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
 }
 
-h1,
-h2,
-h3 {
+/* ── Typography ── */
+h1, h2, h3 {
   text-transform: uppercase;
-  font-family: "rader";
+  font-family: "rader", serif;
   font-style: italic;
   line-height: 0.95;
 }
 
-h1 {
-  font-size: 5rem;
-}
-
-h2 {
-  font-size: 4rem;
-}
-
-h3 {
-  font-size: 2rem;
-}
+h1 { font-size: 5rem; }
+h2 { font-size: 4rem; }
+h3 { font-size: 2rem; }
 
 a {
   text-decoration: none;
-  color: var(--fg);
+  color: inherit;
 }
 
 p,
 p.ss {
-  font-family: "formula-narrow";
-  font-size: 1.25rem;
-  font-weight: 600;
-  line-height: 1.125;
+  font-family: "formula-narrow", sans-serif;
+  font-size: 1.15rem;
+  font-weight: 500;
+  line-height: 1.5;
 }
 
 p.mn {
   text-transform: uppercase;
-  font-family: "supply-mono";
-  font-size: 0.875rem;
+  font-family: "supply-mono", monospace;
+  font-size: 0.8rem;
   font-weight: 500;
-  line-height: 1.125;
+  line-height: 1.2;
+  letter-spacing: 0.06em;
 }
 
-/* contact cta */
+/* ── Utility: Gradient Text ── */
+.gradient-text {
+  background: var(--grad-accent);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Utility: Glow Border ── */
+.glow-border {
+  border: 1px solid var(--border-accent);
+  box-shadow: var(--shadow-glow), inset 0 0 20px rgba(124,58,237,0.05);
+}
+
+/* ══════════════════════════════════════
+   CONTACT CTA SECTION
+   ══════════════════════════════════════ */
+
 .contact-cta {
   position: relative;
   width: 100vw;
   height: 100svh;
-  padding: 2em;
+  padding: 4em 2em;
   display: flex;
   justify-content: center;
   align-items: center;
+  overflow: hidden;
+}
+
+.contact-cta::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 60% 50% at 50% 50%, rgba(124,58,237,0.08) 0%, transparent 70%);
+  pointer-events: none;
 }
 
 .contact-cta .contact-button {
   position: relative;
-  width: 60%;
-  height: 300px;
-  border: 0.75em solid #000;
-  border-radius: 20em;
-  background: linear-gradient(
-    45deg,
-    var(--accent1),
-    var(--accent2),
-    var(--accent3),
-    var(--accent4)
-  );
-  background-size: 400% 400%;
+  width: min(720px, 90%);
+  height: 240px;
+  border-radius: 2em;
+  background: var(--surface);
+  border: 1px solid var(--border);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 8px;
-  transition: transform 0.2s ease;
-  animation: gradientMove 10s ease-in-out infinite;
-  box-shadow: 10px 10px 0px 5px #000000;
-  overflow: hidden;
+  gap: 0.75em;
   cursor: pointer;
-}
-
-.contact-cta a {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 100%;
-  height: 100%;
-  z-index: 2;
+  transition: transform 0.3s cubic-bezier(0.22, 0.68, 0, 1.2),
+              border-color 0.3s ease,
+              box-shadow 0.3s ease;
+  overflow: hidden;
 }
 
 .contact-cta .contact-button::before {
   content: "";
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 200%;
-  height: 100%;
-  background: repeating-linear-gradient(
-    45deg,
-    rgba(0, 0, 0, 0.125) 0px,
-    rgba(0, 0, 0, 0.125) 15px,
-    transparent 15px,
-    transparent 30px
-  );
-  animation: stripeMove 30s linear infinite;
+  inset: -1px;
+  border-radius: 2em;
+  background: var(--grad-accent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 0;
 }
 
-.contact-cta .contact-text-small {
-  position: relative;
+.contact-cta .contact-button::after {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  border-radius: calc(2em - 1px);
+  background: var(--surface);
   z-index: 1;
 }
 
+.contact-cta .contact-button:hover::before {
+  opacity: 1;
+}
+
+.contact-cta .contact-button:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-glow);
+}
+
+.contact-cta a {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  border-radius: 2em;
+}
+
+.contact-cta .contact-text-small,
 .contact-cta .contact-text-large {
   position: relative;
-  z-index: 1;
+  z-index: 2;
+}
+
+.contact-cta .contact-text-small p {
+  color: var(--fg-muted);
+  letter-spacing: 0.08em;
 }
 
 .contact-cta .contact-text-large h1 {
-  font-size: 7rem;
+  font-size: clamp(3.5rem, 7vw, 6rem);
+  background: var(--grad-accent);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-@keyframes gradientMove {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
+/* ══════════════════════════════════════
+   BIO TYPEWRITER
+   ══════════════════════════════════════ */
 
-@keyframes stripeMove {
-  0% {
-    transform: translateX(-50%);
-  }
-  100% {
-    transform: translateX(0%);
-  }
-}
-
-@media (max-width: 1000px) {
-  h1 {
-    font-size: 2.5rem;
-  }
-
-  .contact-cta {
-    height: max-content;
-    padding: 8em 2em;
-  }
-
-  .contact-cta .contact-button {
-    width: 95%;
-    height: 250px;
-    gap: 1em;
-    border-radius: 2em;
-  }
-
-  .contact-cta .contact-text-small {
-    width: 75%;
-    text-align: center;
-  }
-
-  .contact-cta .contact-text-large h1 {
-    font-size: 3rem;
-  }
-}
-
-/* Bio typewriter effect */
 .bio-typewriter {
   display: block;
   width: 100%;
@@ -209,19 +238,50 @@ p.mn {
 }
 
 .bio-char {
-  color: rgba(72, 56, 38, 0.9);
-  transition: color 0.08s ease, transform 0.08s ease, font-size 0.08s ease;
+  color: var(--fg-muted);
+  transition: color 0.08s ease, transform 0.08s ease;
   display: inline-block;
 }
 
 .bio-char.bio-char-current {
-  color: rgba(72, 56, 38, 0.9);
-  transform: scale(1.5);
+  color: var(--violet-light);
+  transform: scale(1.15);
   display: inline-block;
-  text-shadow: none;
 }
 
 .bio-char.bio-char-done {
-  color: rgba(72, 56, 38, 0.9);
+  color: var(--fg);
   transform: scale(1);
+}
+
+/* ══════════════════════════════════════
+   RESPONSIVE BASE
+   ══════════════════════════════════════ */
+
+@media (max-width: 1000px) {
+  h1  { font-size: 2.5rem; }
+  h2  { font-size: 2rem; }
+  h3  { font-size: 1.5rem; }
+
+  .contact-cta {
+    height: max-content;
+    padding: 6em 1.5em;
+  }
+
+  .contact-cta .contact-button {
+    height: 200px;
+    border-radius: 1.5em;
+  }
+
+  .contact-cta .contact-text-large h1 {
+    font-size: 2.5rem;
+  }
+}
+
+@media (max-width: 600px) {
+  h1  { font-size: 2rem; }
+
+  .contact-cta .contact-button {
+    height: 180px;
+  }
 }

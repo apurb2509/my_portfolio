@@ -1,193 +1,201 @@
-/* ══════════════════════════════════════
-TECH STACK SECTION
-File: css/techstack.css
-══════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════
+   TECHSTACK.CSS — Tech Stack Section
+   ═══════════════════════════════════════════════════ */
 
 .tech-stack {
-position: relative;
-width: 100%;
-padding: 1em 2em 5em 2em;
-display: flex;
-flex-direction: column;
-align-items: center;
-gap: 3.5em;
-background-color: transparent;
-z-index: 1;
+  position: relative;
+  width: 100%;
+  padding: 2em 2em 6em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3.5em;
+  border-top: 1px solid var(--border);
+  overflow: hidden;
 }
 
-/* Section header */
+/* Ambient glow */
+.tech-stack::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 500px;
+  height: 300px;
+  background: radial-gradient(ellipse, rgba(6,182,212,0.06), transparent 70%);
+  pointer-events: none;
+}
+
+/* ── Section Header ── */
 .tech-stack-header {
-text-align: center;
-display: flex;
-flex-direction: column;
-gap: 0.4em;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45em;
+  position: relative;
+  z-index: 2;
 }
 
 .tech-stack-header p.mn {
-color: #6b4c32;
-letter-spacing: 0.12em;
-text-transform: uppercase;
+  color: #22d3ee;
+  letter-spacing: 0.18em;
 }
 
 .tech-stack-header h1 {
-color: #483C32;
-font-size: clamp(2rem, 5vw, 3.5rem);
-line-height: 1.1;
+  background: linear-gradient(135deg, #f1f5f9 40%, #22d3ee 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  line-height: 1.1;
 }
 
-/* Divider line */
+/* ── Divider ── */
 .tech-stack-divider {
-width: min(860px, 100%);
-height: 1px;
-background: linear-gradient(
- to right,
- transparent,
- rgba(72, 60, 50, 0.25) 20%,
- rgba(72, 60, 50, 0.25) 80%,
- transparent
-);
-margin: 0 auto;
+  width: min(860px, 100%);
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--border-accent) 20%,
+    var(--border-accent) 80%,
+    transparent
+  );
+  margin: 0 auto;
 }
 
-/* All categories container */
+/* ── Body ── */
 .tech-stack-body {
-display: flex;
-flex-direction: column;
-gap: 3em;
-width: 100%;
-max-width: 900px;
+  display: flex;
+  flex-direction: column;
+  gap: 3em;
+  width: 100%;
+  max-width: 940px;
+  position: relative;
+  z-index: 2;
 }
 
-/* Single category block */
+/* ── Category Block ── */
 .ts-category {
-display: flex;
-flex-direction: column;
-align-items: center;
-gap: 1em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1em;
 }
 
 .ts-category-label {
-display: flex;
-align-items: center;
-gap: 0.5em;
-color: #483C32;
-font-family: "supply-mono", monospace;
-font-size: 0.78rem;
-font-weight: 600;
-letter-spacing: 0.14em;
-text-transform: uppercase;
-opacity: 0.7;
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  color: var(--fg-muted);
+  font-family: "supply-mono", monospace;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  opacity: 0.65;
 }
 
 .ts-category-label span {
-font-size: 1rem;
+  font-size: 1rem;
 }
 
-/* Pills row */
+/* ── Pills Row ── */
 .ts-pills {
-display: flex;
-flex-wrap: wrap;
-justify-content: center;
-gap: 0.65em;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.6em;
 }
 
-/* Individual pill */
+/* ── Individual Pill ── */
 .ts-pill {
-display: inline-flex;
-align-items: center;
-gap: 0.5em;
-padding: 0.65em 1.4em;
-border-radius: 3em;
-background-color: #e8e0d5;
-border: 1.5px solid rgba(72, 60, 50, 0.18);
-box-shadow:
- 3px 3px 0px 1px rgba(72, 60, 50, 0.10),
- 0 1px 8px rgba(72, 60, 50, 0.06);
-font-family: "supply-mono", monospace;
-font-size: 0.82rem;
-font-weight: 600;
-letter-spacing: 0.08em;
-text-transform: uppercase;
-color: #2e2218;
-text-decoration: none;
-transition:
- transform 0.28s cubic-bezier(0.22, 0.68, 0, 1.2),
- box-shadow 0.28s ease,
- background-color 0.22s ease,
- border-color 0.22s ease;
-will-change: transform;
-cursor: default;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  padding: 0.6em 1.3em;
+  border-radius: 3em;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font-family: "supply-mono", monospace;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  text-decoration: none;
+  cursor: default;
+  /* Start hidden for fly-in animation */
+  opacity: 0;
+  transition:
+    opacity 0.4s ease,
+    transform 0.45s cubic-bezier(0.22, 0.68, 0, 1.2),
+    box-shadow 0.3s ease,
+    background 0.25s ease,
+    border-color 0.25s ease,
+    color 0.25s ease;
+  will-change: transform, opacity;
 }
 
 .ts-pill:hover {
-transform: translateY(-3px) scale(1.04);
-background-color: #ddd4c5;
-border-color: rgba(72, 60, 50, 0.35);
-box-shadow:
- 5px 8px 0px 1px rgba(72, 60, 50, 0.13),
- 0 4px 18px rgba(72, 60, 50, 0.11);
+  transform: translateY(-3px) scale(1.05);
+  background: var(--surface2);
+  border-color: rgba(124, 58, 237, 0.4);
+  color: var(--fg);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.35),
+              0 0 12px rgba(124, 58, 237, 0.12);
 }
 
-/* Logo inside pill */
 .ts-pill img {
-width: 19px;
-height: 19px;
-object-fit: contain;
-display: block;
-flex-shrink: 0;
-/* Slight drop shadow so logos pop on beige bg */
-filter: drop-shadow(0 1px 1px rgba(0,0,0,0.10));
+  width: 17px;
+  height: 17px;
+  object-fit: contain;
+  display: block;
+  flex-shrink: 0;
+  filter: brightness(0.85) saturate(0.7);
+  transition: filter 0.25s ease;
 }
 
-/* Subtle scroll-in reveal */
-/* .ts-category {
-opacity: 0;
-transform: translateY(28px);
-transition:
- opacity 0.55s ease,
- transform 0.55s cubic-bezier(0.23, 1, 0.32, 1);
+.ts-pill:hover img {
+  filter: brightness(1) saturate(1);
 }
 
-.ts-category.ts-visible {
-opacity: 1;
-transform: translateY(0);
-} */
+/* Visible state (applied by fly-in JS) */
+.ts-pill.pill-visible {
+  opacity: 1;
+  transform: none !important;
+}
 
+/* Stagger delays per category */
 .ts-category:nth-child(1) { transition-delay: 0.00s; }
 .ts-category:nth-child(2) { transition-delay: 0.08s; }
 .ts-category:nth-child(3) { transition-delay: 0.16s; }
 .ts-category:nth-child(4) { transition-delay: 0.24s; }
 .ts-category:nth-child(5) { transition-delay: 0.32s; }
 
-/* ── Responsive ── */
-@media (max-width: 700px) {
-.tech-stack {
- padding: 4em 1.2em 3.5em 1.2em;
- gap: 2.5em;
-}
+/* ══════════════════════════════════════
+   RESPONSIVE
+   ══════════════════════════════════════ */
 
-.ts-pill {
- font-size: 0.65rem;
- padding: 0.45em 0.9em;
-}
-
-.ts-pill img {
- width: 13px;
- height: 13px;
-}
-
-.tech-stack-header h1 {
- font-size: 1.9rem;
-}
-}
-
-/* Individual pill fly-in */
-.ts-pill {
-    opacity: 0;
-    transition: opacity 0.35s ease, transform 0.45s cubic-bezier(0.22, 0.68, 0, 1.2);
+@media (max-width: 768px) {
+  .tech-stack {
+    padding: 2em 1.25em 4em;
+    gap: 2.5em;
   }
-  
-  .ts-pill.pill-visible {
-    opacity: 1;
-    transform: none !important;
+
+  .ts-pill {
+    font-size: 0.65rem;
+    padding: 0.5em 0.9em;
   }
+
+  .ts-pill img {
+    width: 14px;
+    height: 14px;
+  }
+
+  .tech-stack-header h1 {
+    font-size: 1.8rem;
+  }
+}
