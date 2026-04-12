@@ -37,43 +37,45 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Create main ScrollTrigger to track entire service section
     const mainTrigger = ScrollTrigger.create({
-      trigger: services[0], // First service card as trigger
-      start: "top 50%", // Start when top of first card hits 50% of viewport
-      endTrigger: services[services.length - 1], // Last service card
-      end: "top 150%", // End when last card's top hits 150% of viewport
+      trigger: services[0],
+      start: "top 50%",
+      endTrigger: services[services.length - 1],
+      end: "top 150%",
     });
-    scrollTriggerInstances.push(mainTrigger); // Store instance
+    scrollTriggerInstances.push(mainTrigger);
 
     // Animate each service card
     services.forEach((service, index) => {
-      const isLastServiceCard = index === services.length - 1; // Check if last card
-      const serviceCardInner = service.querySelector(".service-card-inner"); // Inner element for animation
+      const isLastServiceCard = index === services.length - 1;
+      const serviceCardInner = service.querySelector(".service-card-inner");
 
       if (!isLastServiceCard) {
-        // Pin service card during scroll
+        // Pin service card during scroll — end is tied to the contact-cta
         const pinTrigger = ScrollTrigger.create({
-          trigger: service, // Current service card
-          start: "top 45%", // Pin when top hits 45% of viewport
-          endTrigger: ".contact-cta", // End at contact CTA section
-          end: "top 90%", // End when contact CTA top hits 90% of viewport
-          pin: true, // Pin the card in place
-          pinSpacing: false, // No extra spacing for pinned elements
+          trigger: service,
+          start: "top 45%",
+          endTrigger: ".contact-cta",
+          end: "top 100%", // was 90%, extended so last card doesn't overlap
+          pin: true,
+          pinSpacing: false,
         });
-        scrollTriggerInstances.push(pinTrigger); // Store instance
+        scrollTriggerInstances.push(pinTrigger);
 
-        // Animate inner card content with vertical movement
+        // Each card slides up by a smaller, fixed amount to prevent overlap
+        // Using a fixed 10vh per card instead of a multiplier-based formula
+        const yShift = (services.length - 1 - index) * 10;
         const scrollAnimation = gsap.to(serviceCardInner, {
-          y: `-${(services.length - index) * 14}vh`, // Move up based on card position
-          ease: "none", // Linear animation for smooth scroll
+          y: `-${yShift}vh`,
+          ease: "none",
           scrollTrigger: {
-            trigger: service, // Current service card
-            start: "top 45%", // Start animation at 45% of viewport
-            endTrigger: ".contact-cta", // End at contact CTA
-            end: "top 90%", // End when contact CTA top hits 90%
-            scrub: true, // Tie animation to scroll position
+            trigger: service,
+            start: "top 45%",
+            endTrigger: ".contact-cta",
+            end: "top 100%",
+            scrub: true,
           },
         });
-        scrollTriggerInstances.push(scrollAnimation.scrollTrigger); // Store ScrollTrigger instance
+        scrollTriggerInstances.push(scrollAnimation.scrollTrigger);
       }
     });
   };
