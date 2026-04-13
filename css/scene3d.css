@@ -1,0 +1,33 @@
+/* ═══════════════════════════════════════════════════
+   SCENE3D.CSS — Three.js Background Canvas
+   Fixed behind all page content, pointer-events: none
+   ═══════════════════════════════════════════════════ */
+
+#scene3d-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+  display: block;
+  will-change: transform; /* compositor hint */
+}
+
+/* Ensure all page content stacks above the 3D canvas */
+.page {
+  position: relative;
+  z-index: 2;
+}
+
+/* Nav overlay above canvas */
+.nav-overlay {
+  z-index: 200;
+}
+
+/* Page transition overlays must be topmost */
+.transition {
+  position: relative;
+  z-index: 1000;
+}

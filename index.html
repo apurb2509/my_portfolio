@@ -19,6 +19,7 @@
     <link rel="stylesheet" href="/css/techstack.css" />
     <link rel="stylesheet" href="/css/contact.css" />
     <link rel="stylesheet" href="/css/footer.css" />
+    <link rel="stylesheet" href="/css/scene3d.css" />
 
     <!-- Preconnect for performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -41,6 +42,9 @@
       <div class="transition-overlay overlay-4"></div>
       <div class="transition-overlay overlay-5"></div>
     </div>
+
+    <!-- ── 3D Background Canvas (Three.js) ── -->
+    <canvas id="scene3d-canvas" aria-hidden="true"></canvas>
 
     <div class="page home-page">
 
@@ -592,11 +596,11 @@
           <div class="ts-category">
             <div class="ts-category-label"><span>💻</span> Languages</div>
             <div class="ts-pills">
-              <span class="ts-pill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/c/c-original.svg" alt="">C</span>
-              <span class="ts-pill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg" alt="">Java</span>
-              <span class="ts-pill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="">Python</span>
-              <span class="ts-pill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="">JavaScript</span>
-              <span class="ts-pill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" alt="">TypeScript</span>
+              <span class="ts-pill" style="--icon-bg:rgba(168,185,204,0.13);--icon-border:rgba(168,185,204,0.45);--icon-side:rgba(168,185,204,0.65);--icon-glow:rgba(168,185,204,0.2)"><span class="ts-icon-3d"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/c/c-original.svg" alt=""></span>C</span>
+              <span class="ts-pill" style="--icon-bg:rgba(237,139,0,0.13);--icon-border:rgba(237,139,0,0.45);--icon-side:rgba(237,139,0,0.65);--icon-glow:rgba(237,139,0,0.22)"><span class="ts-icon-3d"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg" alt=""></span>Java</span>
+              <span class="ts-pill" style="--icon-bg:rgba(55,118,171,0.13);--icon-border:rgba(55,118,171,0.45);--icon-side:rgba(55,118,171,0.65);--icon-glow:rgba(55,118,171,0.22)"><span class="ts-icon-3d"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt=""></span>Python</span>
+              <span class="ts-pill" style="--icon-bg:rgba(247,223,30,0.13);--icon-border:rgba(247,223,30,0.45);--icon-side:rgba(247,223,30,0.65);--icon-glow:rgba(247,223,30,0.22)"><span class="ts-icon-3d"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt=""></span>JavaScript</span>
+              <span class="ts-pill" style="--icon-bg:rgba(49,120,198,0.13);--icon-border:rgba(49,120,198,0.45);--icon-side:rgba(49,120,198,0.65);--icon-glow:rgba(49,120,198,0.22)"><span class="ts-icon-3d"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" alt=""></span>TypeScript</span>
             </div>
           </div>
 
@@ -606,11 +610,11 @@
           <div class="ts-category">
             <div class="ts-category-label"><span>🎨</span> Frontend Development</div>
             <div class="ts-pills">
-              <span class="ts-pill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="">HTML5</span>
-              <span class="ts-pill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="">CSS3</span>
-              <span class="ts-pill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" alt="">React</span>
-              <span class="ts-pill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg" alt="">Tailwind CSS</span>
-              <span class="ts-pill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/threejs/threejs-original.svg" alt="" style="filter:invert(0.9)">Three.js</span>
+              <span class="ts-pill" style="--icon-bg:rgba(227,79,38,0.13);--icon-border:rgba(227,79,38,0.45);--icon-side:rgba(227,79,38,0.65);--icon-glow:rgba(227,79,38,0.22)"><span class="ts-icon-3d"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt=""></span>HTML5</span>
+              <span class="ts-pill" style="--icon-bg:rgba(21,114,182,0.13);--icon-border:rgba(21,114,182,0.45);--icon-side:rgba(21,114,182,0.65);--icon-glow:rgba(21,114,182,0.22)"><span class="ts-icon-3d"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt=""></span>CSS3</span>
+              <span class="ts-pill" style="--icon-bg:rgba(97,218,251,0.13);--icon-border:rgba(97,218,251,0.45);--icon-side:rgba(97,218,251,0.65);--icon-glow:rgba(97,218,251,0.22)"><span class="ts-icon-3d"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" alt=""></span>React</span>
+              <span class="ts-pill" style="--icon-bg:rgba(6,182,212,0.13);--icon-border:rgba(6,182,212,0.45);--icon-side:rgba(6,182,212,0.65);--icon-glow:rgba(6,182,212,0.22)"><span class="ts-icon-3d"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg" alt=""></span>Tailwind CSS</span>
+              <span class="ts-pill" style="--icon-bg:rgba(124,58,237,0.13);--icon-border:rgba(124,58,237,0.45);--icon-side:rgba(124,58,237,0.65);--icon-glow:rgba(124,58,237,0.22)"><span class="ts-icon-3d"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/threejs/threejs-original.svg" alt="" style="filter:invert(0.88)"></span>Three.js</span>
             </div>
           </div>
 
@@ -620,14 +624,14 @@
           <div class="ts-category">
             <div class="ts-category-label"><span>⚙️</span> Backend &amp; Databases</div>
             <div class="ts-pills">
-              <span class="ts-pill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" alt="">Node.js</span>
-              <span class="ts-pill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fastapi/fastapi-original.svg" alt="">FastAPI</span>
-              <span class="ts-pill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg" alt="" style="filter:invert(0.8)">Express.js</span>
-              <span class="ts-pill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg" alt="">MongoDB</span>
-              <span class="ts-pill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg" alt="">MySQL</span>
-              <span class="ts-pill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg" alt="">PostgreSQL</span>
-              <span class="ts-pill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redis/redis-original.svg" alt="">Redis</span>
-              <span class="ts-pill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/supabase/supabase-original.svg" alt="">Supabase</span>
+              <span class="ts-pill" style="--icon-bg:rgba(51,153,51,0.13);--icon-border:rgba(51,153,51,0.45);--icon-side:rgba(51,153,51,0.65);--icon-glow:rgba(51,153,51,0.22)"><span class="ts-icon-3d"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" alt=""></span>Node.js</span>
+              <span class="ts-pill" style="--icon-bg:rgba(0,150,136,0.13);--icon-border:rgba(0,150,136,0.45);--icon-side:rgba(0,150,136,0.65);--icon-glow:rgba(0,150,136,0.22)"><span class="ts-icon-3d"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fastapi/fastapi-original.svg" alt=""></span>FastAPI</span>
+              <span class="ts-pill" style="--icon-bg:rgba(136,136,136,0.12);--icon-border:rgba(136,136,136,0.4);--icon-side:rgba(136,136,136,0.55);--icon-glow:rgba(136,136,136,0.15)"><span class="ts-icon-3d"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg" alt="" style="filter:invert(0.8)"></span>Express.js</span>
+              <span class="ts-pill" style="--icon-bg:rgba(71,162,72,0.13);--icon-border:rgba(71,162,72,0.45);--icon-side:rgba(71,162,72,0.65);--icon-glow:rgba(71,162,72,0.22)"><span class="ts-icon-3d"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg" alt=""></span>MongoDB</span>
+              <span class="ts-pill" style="--icon-bg:rgba(68,121,161,0.13);--icon-border:rgba(68,121,161,0.45);--icon-side:rgba(68,121,161,0.65);--icon-glow:rgba(68,121,161,0.22)"><span class="ts-icon-3d"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg" alt=""></span>MySQL</span>
+              <span class="ts-pill" style="--icon-bg:rgba(51,103,145,0.13);--icon-border:rgba(51,103,145,0.45);--icon-side:rgba(51,103,145,0.65);--icon-glow:rgba(51,103,145,0.22)"><span class="ts-icon-3d"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg" alt=""></span>PostgreSQL</span>
+              <span class="ts-pill" style="--icon-bg:rgba(220,56,45,0.13);--icon-border:rgba(220,56,45,0.45);--icon-side:rgba(220,56,45,0.65);--icon-glow:rgba(220,56,45,0.22)"><span class="ts-icon-3d"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redis/redis-original.svg" alt=""></span>Redis</span>
+              <span class="ts-pill" style="--icon-bg:rgba(62,207,142,0.13);--icon-border:rgba(62,207,142,0.45);--icon-side:rgba(62,207,142,0.65);--icon-glow:rgba(62,207,142,0.22)"><span class="ts-icon-3d"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/supabase/supabase-original.svg" alt=""></span>Supabase</span>
             </div>
           </div>
 
@@ -637,10 +641,10 @@
           <div class="ts-category">
             <div class="ts-category-label"><span>☁️</span> Cloud &amp; DevOps</div>
             <div class="ts-pills">
-              <span class="ts-pill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" alt="">Docker</span>
-              <span class="ts-pill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/googlecloud/googlecloud-original.svg" alt="">Google Cloud</span>
-              <span class="ts-pill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-plain-wordmark.svg" alt="" style="filter:brightness(0.7) sepia(1) hue-rotate(170deg) saturate(3)">AWS</span>
-              <span class="ts-pill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/firebase/firebase-plain.svg" alt="">Firebase</span>
+              <span class="ts-pill" style="--icon-bg:rgba(36,150,237,0.13);--icon-border:rgba(36,150,237,0.45);--icon-side:rgba(36,150,237,0.65);--icon-glow:rgba(36,150,237,0.22)"><span class="ts-icon-3d"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" alt=""></span>Docker</span>
+              <span class="ts-pill" style="--icon-bg:rgba(66,133,244,0.13);--icon-border:rgba(66,133,244,0.45);--icon-side:rgba(66,133,244,0.65);--icon-glow:rgba(66,133,244,0.22)"><span class="ts-icon-3d"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/googlecloud/googlecloud-original.svg" alt=""></span>Google Cloud</span>
+              <span class="ts-pill" style="--icon-bg:rgba(255,153,0,0.13);--icon-border:rgba(255,153,0,0.45);--icon-side:rgba(255,153,0,0.65);--icon-glow:rgba(255,153,0,0.22)"><span class="ts-icon-3d"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-plain-wordmark.svg" alt="" style="filter:brightness(0.7) sepia(1) hue-rotate(170deg) saturate(3)"></span>AWS</span>
+              <span class="ts-pill" style="--icon-bg:rgba(255,202,40,0.13);--icon-border:rgba(255,202,40,0.45);--icon-side:rgba(255,202,40,0.65);--icon-glow:rgba(255,202,40,0.22)"><span class="ts-icon-3d"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/firebase/firebase-plain.svg" alt=""></span>Firebase</span>
             </div>
           </div>
 
@@ -650,10 +654,10 @@
           <div class="ts-category">
             <div class="ts-category-label"><span>🔧</span> Developer Tools</div>
             <div class="ts-pills">
-              <span class="ts-pill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" alt="">Git</span>
-              <span class="ts-pill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" alt="" style="filter:invert(0.8)">GitHub</span>
-              <span class="ts-pill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postman/postman-original.svg" alt="">Postman</span>
-              <span class="ts-pill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/photoshop/photoshop-original.svg" alt="">Photoshop</span>
+              <span class="ts-pill" style="--icon-bg:rgba(240,80,50,0.13);--icon-border:rgba(240,80,50,0.45);--icon-side:rgba(240,80,50,0.65);--icon-glow:rgba(240,80,50,0.22)"><span class="ts-icon-3d"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" alt=""></span>Git</span>
+              <span class="ts-pill" style="--icon-bg:rgba(200,200,200,0.12);--icon-border:rgba(200,200,200,0.4);--icon-side:rgba(200,200,200,0.55);--icon-glow:rgba(200,200,200,0.15)"><span class="ts-icon-3d"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" alt="" style="filter:invert(0.8)"></span>GitHub</span>
+              <span class="ts-pill" style="--icon-bg:rgba(255,108,55,0.13);--icon-border:rgba(255,108,55,0.45);--icon-side:rgba(255,108,55,0.65);--icon-glow:rgba(255,108,55,0.22)"><span class="ts-icon-3d"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postman/postman-original.svg" alt=""></span>Postman</span>
+              <span class="ts-pill" style="--icon-bg:rgba(49,168,255,0.13);--icon-border:rgba(49,168,255,0.45);--icon-side:rgba(49,168,255,0.65);--icon-glow:rgba(49,168,255,0.22)"><span class="ts-icon-3d"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/photoshop/photoshop-original.svg" alt=""></span>Photoshop</span>
             </div>
           </div>
 
@@ -846,14 +850,51 @@
           const PAD_X = 12, PAD_Y = 6;
           const CORNER = 20;
 
-          // Violet/cyan palette for dark theme
+          // Brand-aware colour palette per technology name
+          const BRAND_COLORS = {
+            'react':           { bg:'rgba(97,218,251,0.12)',  border:'rgba(97,218,251,0.55)',  text:'#61DAFB' },
+            'react.js':        { bg:'rgba(97,218,251,0.12)',  border:'rgba(97,218,251,0.55)',  text:'#61DAFB' },
+            'node.js':         { bg:'rgba(51,153,51,0.12)',   border:'rgba(51,153,51,0.55)',   text:'#4CAF50' },
+            'fastapi':         { bg:'rgba(0,150,136,0.12)',   border:'rgba(0,150,136,0.55)',   text:'#26A69A' },
+            'supabase':        { bg:'rgba(62,207,142,0.12)',  border:'rgba(62,207,142,0.55)',  text:'#3ECF8E' },
+            'websockets':      { bg:'rgba(168,85,247,0.12)',  border:'rgba(168,85,247,0.55)',  text:'#a855f7' },
+            'gemini api':      { bg:'rgba(66,133,244,0.12)',  border:'rgba(66,133,244,0.55)',  text:'#4285F4' },
+            'groq':            { bg:'rgba(255,107,107,0.12)', border:'rgba(255,107,107,0.55)', text:'#FF6B6B' },
+            'hugging face':    { bg:'rgba(255,185,0,0.12)',   border:'rgba(255,185,0,0.55)',   text:'#FFB900' },
+            'twilio':          { bg:'rgba(242,47,70,0.12)',   border:'rgba(242,47,70,0.55)',   text:'#F22F46' },
+            'langchain':       { bg:'rgba(31,184,113,0.12)',  border:'rgba(31,184,113,0.55)',  text:'#1FB871' },
+            'pinecone':        { bg:'rgba(34,211,238,0.12)',  border:'rgba(34,211,238,0.55)',  text:'#22d3ee' },
+            'three.js':        { bg:'rgba(4,158,244,0.12)',   border:'rgba(4,158,244,0.55)',   text:'#049EF4' },
+            'framer-motion':   { bg:'rgba(0,85,255,0.12)',    border:'rgba(0,85,255,0.55)',    text:'#0055FF' },
+            'typescript':      { bg:'rgba(49,120,198,0.12)',  border:'rgba(49,120,198,0.55)',  text:'#3178C6' },
+            'axios':           { bg:'rgba(95,142,228,0.12)',  border:'rgba(95,142,228,0.55)',  text:'#5F8EE4' },
+            'clerk':           { bg:'rgba(110,72,231,0.12)',  border:'rgba(110,72,231,0.55)',  text:'#6E48E7' },
+            'google cloud':    { bg:'rgba(66,133,244,0.12)',  border:'rgba(66,133,244,0.55)',  text:'#4285F4' },
+            'firebase':        { bg:'rgba(255,202,40,0.12)',  border:'rgba(255,202,40,0.55)',  text:'#FFCA28' },
+            'firestore':       { bg:'rgba(255,160,0,0.12)',   border:'rgba(255,160,0,0.55)',   text:'#FFA000' },
+            'gsap':            { bg:'rgba(136,202,76,0.12)',  border:'rgba(136,202,76,0.55)',  text:'#88CA4C' },
+            'maps api':        { bg:'rgba(66,133,244,0.12)',  border:'rgba(66,133,244,0.55)',  text:'#4285F4' },
+            'chrome extension':{ bg:'rgba(66,133,244,0.12)',  border:'rgba(66,133,244,0.55)',  text:'#4285F4' },
+            'javascript':      { bg:'rgba(247,223,30,0.12)',  border:'rgba(247,223,30,0.55)',  text:'#F7DF1E' },
+            'canvas api':      { bg:'rgba(255,165,0,0.12)',   border:'rgba(255,165,0,0.55)',   text:'#FFA500' },
+            'manifest v3':     { bg:'rgba(66,133,244,0.12)',  border:'rgba(66,133,244,0.55)',  text:'#4285F4' },
+            'openai':          { bg:'rgba(16,163,127,0.12)',  border:'rgba(16,163,127,0.55)',  text:'#10A37F' },
+            'flask':           { bg:'rgba(180,180,180,0.12)', border:'rgba(180,180,180,0.4)',  text:'#C0C0C0' },
+            'vercel':          { bg:'rgba(150,150,150,0.12)', border:'rgba(150,150,150,0.4)',  text:'#E0E0E0' },
+            'dbscan':          { bg:'rgba(168,85,247,0.12)',  border:'rgba(168,85,247,0.55)',  text:'#a855f7' },
+            'tawk.to':         { bg:'rgba(19,172,175,0.12)',  border:'rgba(19,172,175,0.55)',  text:'#13ACAF' },
+            'hostinger':       { bg:'rgba(103,80,221,0.12)',  border:'rgba(103,80,221,0.55)',  text:'#6750DD' },
+            'whatsapp api':    { bg:'rgba(37,211,102,0.12)',  border:'rgba(37,211,102,0.55)',  text:'#25D366' },
+            'express.js':      { bg:'rgba(180,180,180,0.10)', border:'rgba(180,180,180,0.38)', text:'#AAAAAA' },
+          };
+          // Fallback palettes matching portfolio violet/cyan theme
           const PALETTES = [
-            { bg: 'rgba(124,58,237,0.12)',  border: 'rgba(124,58,237,0.4)',  text: '#c084fc' },
-            { bg: 'rgba(6,182,212,0.10)',   border: 'rgba(6,182,212,0.35)',  text: '#22d3ee' },
-            { bg: 'rgba(168,85,247,0.10)',  border: 'rgba(168,85,247,0.35)', text: '#a855f7' },
-            { bg: 'rgba(34,211,238,0.09)',  border: 'rgba(34,211,238,0.3)',  text: '#67e8f9' },
-            { bg: 'rgba(139,92,246,0.11)',  border: 'rgba(139,92,246,0.38)', text: '#a78bfa' },
-            { bg: 'rgba(6,182,212,0.08)',   border: 'rgba(6,182,212,0.28)',  text: '#06b6d4' },
+            { bg: 'rgba(124,58,237,0.12)',  border: 'rgba(124,58,237,0.5)',  text: '#c084fc' },
+            { bg: 'rgba(6,182,212,0.10)',   border: 'rgba(6,182,212,0.45)',  text: '#22d3ee' },
+            { bg: 'rgba(168,85,247,0.10)',  border: 'rgba(168,85,247,0.45)', text: '#a855f7' },
+            { bg: 'rgba(34,211,238,0.09)',  border: 'rgba(34,211,238,0.4)',  text: '#67e8f9' },
+            { bg: 'rgba(139,92,246,0.11)',  border: 'rgba(139,92,246,0.45)', text: '#a78bfa' },
+            { bg: 'rgba(6,182,212,0.08)',   border: 'rgba(6,182,212,0.38)',  text: '#06b6d4' },
           ];
 
           let pills = [];
@@ -887,7 +928,7 @@
                 y: ph/2 + Math.random() * Math.max(1, h - ph),
                 vx: Math.cos(angle) * speed,
                 vy: Math.sin(angle) * speed,
-                palette: PALETTES[i % PALETTES.length],
+                palette: BRAND_COLORS[text.toLowerCase()] || PALETTES[i % PALETTES.length],
               };
             });
           }
@@ -1037,6 +1078,9 @@
         document.querySelectorAll('.ts-category').forEach(cat => observer.observe(cat));
       })();
     </script>
+
+    <!-- ── 3D Background Scene (Three.js) ── -->
+    <script type="module" src="/js/scene3d.js"></script>
 
   </body>
 </html>

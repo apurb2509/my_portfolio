@@ -148,7 +148,8 @@
               0 0 12px rgba(124, 58, 237, 0.12);
 }
 
-.ts-pill img {
+/* Keep legacy direct img rule as fallback */
+.ts-pill > img {
   width: 17px;
   height: 17px;
   object-fit: contain;
@@ -158,8 +159,51 @@
   transition: filter 0.25s ease;
 }
 
-.ts-pill:hover img {
+.ts-pill:hover > img {
   filter: brightness(1) saturate(1);
+}
+
+/* ── 3D Icon Box ── */
+.ts-icon-3d {
+  position: relative;
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  border-radius: 7px;
+  background: var(--icon-bg, rgba(124,58,237,0.12));
+  border: 1px solid var(--icon-border, rgba(124,58,237,0.4));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* 3D tilt — perspective keeps it in-plane */
+  transform: perspective(200px) rotateX(9deg) rotateY(-14deg);
+  /* Side-face illusion via offset box-shadow trick */
+  box-shadow:
+    3px 3px 0 0 var(--icon-side, rgba(124,58,237,0.55)),
+    0 0 14px var(--icon-glow, rgba(124,58,237,0.18));
+  transition:
+    transform 0.4s cubic-bezier(0.23,1,0.32,1),
+    box-shadow 0.4s ease;
+}
+
+.ts-pill:hover .ts-icon-3d {
+  transform: perspective(200px) rotateX(4deg) rotateY(-7deg) translateY(-5px);
+  box-shadow:
+    5px 5px 0 0 var(--icon-side, rgba(124,58,237,0.65)),
+    0 0 24px var(--icon-glow, rgba(124,58,237,0.32));
+}
+
+.ts-icon-3d img {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  display: block;
+  filter: brightness(1) saturate(1); /* full brand color inside 3D box */
+  transition: filter 0.3s ease;
+}
+
+.ts-pill:hover .ts-icon-3d img {
+  filter: brightness(1.1) saturate(1.15);
 }
 
 /* Visible state (applied by fly-in JS) */
@@ -190,9 +234,15 @@
     padding: 0.5em 0.9em;
   }
 
-  .ts-pill img {
+  .ts-pill > img,
+  .ts-icon-3d img {
     width: 14px;
     height: 14px;
+  }
+
+  .ts-icon-3d {
+    width: 26px;
+    height: 26px;
   }
 
   .tech-stack-header h1 {
