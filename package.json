@@ -13,8 +13,9 @@
     "author": "Apurb Susobhit Baba",
     "license": "MIT",
     "dependencies": {
-        "gsap": "^3.13.0",
+        "gsap": "^3.14.2",
         "lenis": "^1.3.3",
+        "lodash": "^4.18.1",
         "three": "^0.183.2",
         "vite": "^6.3.5"
     }

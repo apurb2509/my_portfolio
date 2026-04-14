@@ -1,22 +1,105 @@
 /**
- * scene3d.js — Interactive 3D Background Scene
+ * scene3d.js — Interactive 3D Journey with GSAP & Real Models
  * Portfolio: Apurb Susobhit Baba
  *
- * Procedural Three.js objects matching the violet (#7c3aed) + cyan (#06b6d4) portfolio palette.
- * Dev theme: laptop, code brackets, terminal, database, torus rings, icosahedron, floating cubes.
- *
- * Performance guarantees:
- *  – Pixel ratio capped at 1.5
- *  – Rendering paused when tab hidden
- *  – ~1300 triangles total (extremely lightweight)
- *  – pointer-events: none (never blocks interaction)
- *  – All objects use emissive MeshStandardMaterial (single pass, no shadows)
+ * This version uses GLTFLoader for real models, GSAP ScrollTrigger for 
+ * scroll-driven animations, and a refined physics engine for neural nodes.
  */
 
 import * as THREE from 'three';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+// Register Plugins
+gsap.registerPlugin(ScrollTrigger);
 
 // ═══════════════════════════════════════════════════
-// RENDERER + SCENE + CAMERA
+// CONFIGURATION
+// ═══════════════════════════════════════════════════
+
+const COLORS = {
+  cyan: new THREE.Color(0x06b6d4),
+  violet: new THREE.Color(0x7c3aed),
+  white: new THREE.Color(0xffffff),
+};
+
+const MODELS_CONFIG = [
+  {
+    id: 'helmet',
+    url: 'https://rawcdn.githack.com/KhronosGroup/glTF-Sample-Models/c639fd3c/2.0/DamagedHelmet/glTF-Binary/DamagedHelmet.glb',
+    pos: [10, -30, 0],
+    scale: 4,
+    section: '.about-hero'
+  },
+  {
+    id: 'lantern',
+    url: 'https://rawcdn.githack.com/KhronosGroup/glTF-Sample-Models/c639fd3c/2.0/Lantern/glTF-Binary/Lantern.glb',
+    pos: [-10, -60, 0],
+    scale: 0.1, // Lantern is huge
+    section: '.services'
+  }
+];
+
+function createProceduralLaptop() {
+  const group = new THREE.Group();
+
+  // Base (rounded edges look more professional)
+  const base = new THREE.Mesh(
+    new THREE.BoxGeometry(5.5, 0.2, 3.8),
+    new THREE.MeshStandardMaterial({ color: 0x111111, metalness: 0.9, roughness: 0.1 })
+  );
+  base.position.y = -0.1;
+  group.add(base);
+
+  // Keyboard Glow
+  const kb = new THREE.Mesh(
+    new THREE.PlaneGeometry(5, 3.2),
+    new THREE.MeshStandardMaterial({ 
+      color: 0x000000, 
+      emissive: COLORS.cyan, 
+      emissiveIntensity: 0.3,
+      transparent: true,
+      opacity: 0.9
+    })
+  );
+  kb.rotation.x = -Math.PI / 2;
+  kb.position.y = 0.11;
+  group.add(kb);
+
+  // Hinge
+  const lidGroup = new THREE.Group();
+  lidGroup.position.set(0, 0, -1.9); // back edge
+  group.add(lidGroup);
+
+  const lid = new THREE.Mesh(
+    new THREE.BoxGeometry(5.5, 0.15, 3.8),
+    new THREE.MeshStandardMaterial({ color: 0x1a1a1a, metalness: 0.9, roughness: 0.1 })
+  );
+  lid.position.set(0, 0, 1.9);
+  lidGroup.add(lid);
+
+  // Screen
+  const screen = new THREE.Mesh(
+    new THREE.PlaneGeometry(5.2, 3.5),
+    new THREE.MeshStandardMaterial({ 
+      color: 0x000000,
+      emissive: COLORS.cyan,
+      emissiveIntensity: 1.0,
+      transparent: true,
+      opacity: 0.4
+    })
+  );
+  screen.position.set(0, 0.08, 1.9);
+  screen.rotation.x = -Math.PI / 2;
+  lidGroup.add(screen);
+
+  group._lid = lidGroup;
+  return group;
+}
+
+// ═══════════════════════════════════════════════════
+// INITIALIZATION
 // ═══════════════════════════════════════════════════
 
 const canvas = document.getElementById('scene3d-canvas');
@@ -30,391 +113,326 @@ const renderer = new THREE.WebGLRenderer({
 });
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
 renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.setClearColor(0x000000, 0); // fully transparent — CSS bg shows through
 
 const scene = new THREE.Scene();
 
 const camera = new THREE.PerspectiveCamera(
-  55,
+  50,
   window.innerWidth / window.innerHeight,
   0.1,
-  120
+  1000
 );
-camera.position.set(0, 0, 10);
+camera.position.set(0, 0, 15);
 
 // ═══════════════════════════════════════════════════
 // LIGHTING
 // ═══════════════════════════════════════════════════
 
-scene.add(new THREE.AmbientLight(0x1a1a2e, 1.2));
+scene.add(new THREE.AmbientLight(0xffffff, 0.8));
 
-const vLight = new THREE.PointLight(0x7c3aed, 14, 28); // violet
-vLight.position.set(-5, 4, 4);
-scene.add(vLight);
+const pointLight = new THREE.PointLight(0x7c3aed, 20, 100);
+pointLight.position.set(10, 10, 10);
+scene.add(pointLight);
 
-const cLight = new THREE.PointLight(0x06b6d4, 11, 22); // cyan
-cLight.position.set(5, -3, 3);
-scene.add(cLight);
-
-const pLight = new THREE.PointLight(0xa855f7, 6, 18); // purple top
-pLight.position.set(0, 7, 2);
-scene.add(pLight);
+const blueLight = new THREE.PointLight(0x06b6d4, 15, 80);
+blueLight.position.set(-10, -10, 5);
+scene.add(blueLight);
 
 // ═══════════════════════════════════════════════════
-// MATERIAL FACTORIES
+// MODELS MANAGEMENT
 // ═══════════════════════════════════════════════════
 
-function solidMat(emissiveHex, intensity = 0.4) {
-  return new THREE.MeshStandardMaterial({
-    color: 0x080818,
-    emissive: emissiveHex,
-    emissiveIntensity: intensity,
-    roughness: 0.55,
-    metalness: 0.85,
+const loader = new GLTFLoader();
+const loadedModels = {};
+
+// ═══════════════════════════════════════════════════
+// PROCEDURAL & ASSETS
+// ═══════════════════════════════════════════════════
+
+const laptop = createProceduralLaptop();
+laptop.position.set(0, 0, 0); // Center of Hero
+laptop.rotation.x = -0.2;
+scene.add(laptop);
+loadedModels.laptop = laptop;
+setupModelAnimations('laptop', laptop, '.hero');
+
+function loadModels() {
+  MODELS_CONFIG.forEach(cfg => {
+    loader.load(cfg.url, 
+      (gltf) => {
+        const model = gltf.scene;
+        model.position.set(...cfg.pos);
+        model.scale.setScalar(cfg.scale);
+        
+        model.traverse(node => {
+          if (node.isMesh) {
+            node.material.metalness = 0.9;
+            node.material.roughness = 0.2;
+            if (cfg.id === 'helmet') {
+              node.material.emissive = COLORS.violet;
+              node.material.emissiveIntensity = 0.2;
+            }
+          }
+        });
+
+        scene.add(model);
+        loadedModels[cfg.id] = model;
+        setupModelAnimations(cfg.id, model, cfg.section);
+      },
+      undefined,
+      (error) => {
+        console.error(`[scene3d] Error loading ${cfg.id}:`, error);
+      }
+    );
   });
 }
 
-function wireMat(color, opacity = 0.3) {
-  return new THREE.MeshBasicMaterial({
-    color,
-    wireframe: true,
-    transparent: true,
-    opacity,
-  });
-}
-
-function lineMat(color, opacity = 0.7) {
-  return new THREE.LineBasicMaterial({ color, transparent: true, opacity });
-}
-
-// ═══════════════════════════════════════════════════
-// HELPERS
-// ═══════════════════════════════════════════════════
-
-/** Adds EdgesGeometry highlight lines on top of a mesh */
-function addEdges(mesh, color, opacity = 0.75) {
-  const edges = new THREE.EdgesGeometry(mesh.geometry, 12);
-  mesh.add(new THREE.LineSegments(edges, lineMat(color, opacity)));
-}
-
-// ═══════════════════════════════════════════════════
-// OBJECTS REGISTRY
-// ═══════════════════════════════════════════════════
-
-const objects = []; // { mesh, rotX, rotY, rotZ, bobAmp, bobSpeed, bobOffset, _initX, _initY }
-
-function register(mesh, rot, bob) {
-  objects.push({
-    mesh,
-    rotX: rot.x || 0,
-    rotY: rot.y || 0,
-    rotZ: rot.z || 0,
-    bobAmp:    bob.amp,
-    bobSpeed:  bob.speed,
-    bobOffset: bob.offset,
-    _initX: mesh.position.x,
-    _initY: mesh.position.y,
-  });
-}
-
-// ═══════════════════════════════════════════════════
-// 1. LAPTOP   (violet glow, top-left region)
-// ═══════════════════════════════════════════════════
-{
-  const g = new THREE.Group();
-
-  // Screen panel
-  const screen = new THREE.Mesh(new THREE.BoxGeometry(1.6, 1.1, 0.07), solidMat(0x7c3aed, 0.3));
-  addEdges(screen, 0x7c3aed, 0.9);
-
-  // Faint screen-glow face
-  const glow = new THREE.Mesh(
-    new THREE.PlaneGeometry(1.36, 0.9),
-    new THREE.MeshBasicMaterial({ color: 0x7c3aed, transparent: true, opacity: 0.07, side: THREE.FrontSide })
-  );
-  glow.position.z = 0.038;
-  screen.add(glow);
-
-  // Keyboard (tilted base)
-  const kb = new THREE.Mesh(new THREE.BoxGeometry(1.6, 0.9, 0.06), solidMat(0x4a1d96, 0.18));
-  addEdges(kb, 0x6d28d9, 0.45);
-  kb.rotation.x = -1.3;
-  kb.position.set(0, -0.62, 0.48);
-
-  g.add(screen, kb);
-  g.position.set(-4.8, 1.6, -2.5);
-  g.rotation.set(0.06, 0.38, -0.09);
-  scene.add(g);
-  register(g, { x: 0.0012, y: 0.0018 }, { amp: 0.1, speed: 0.52, offset: 0 });
-}
-
-// ═══════════════════════════════════════════════════
-// 2. CODE BRACKETS </>   (cyan, right-center)
-// ═══════════════════════════════════════════════════
-{
-  const g = new THREE.Group();
-
-  function arm() {
-    return new THREE.Mesh(new THREE.BoxGeometry(0.09, 0.55, 0.1), solidMat(0x06b6d4, 0.65));
+function setupModelAnimations(id, model, section) {
+  if (id === 'laptop') {
+    // Scroll parallax for laptop
+    gsap.to(model.position, {
+      y: -10,
+      z: -20,
+      scrollTrigger: {
+        trigger: section,
+        start: 'top top',
+        end: 'bottom top',
+        scrub: 1.5
+      }
+    });
   }
 
-  // Left bracket <
-  const lt = new THREE.Group();
-  const a1 = arm(); a1.rotation.z =  0.65; a1.position.set( 0.13,  0.2, 0);
-  const a2 = arm(); a2.rotation.z = -0.65; a2.position.set( 0.13, -0.2, 0);
-  lt.add(a1, a2); lt.position.x = -0.62;
+  // Generic floating logic for empty spaces
+  if (id === 'helmet' || id === 'lantern') {
+    gsap.to(model.position, {
+      y: '+=2.5',
+      repeat: -1,
+      yoyo: true,
+      duration: 3 + Math.random() * 2,
+      ease: 'sine.inOut'
+    });
 
-  // Right bracket >
-  const rt = new THREE.Group();
-  const b1 = arm(); b1.rotation.z = -0.65; b1.position.set(-0.13,  0.2, 0);
-  const b2 = arm(); b2.rotation.z =  0.65; b2.position.set(-0.13, -0.2, 0);
-  rt.add(b1, b2); rt.position.x = 0.62;
-
-  // Slash /  (purple)
-  const slash = new THREE.Mesh(
-    new THREE.BoxGeometry(0.08, 0.82, 0.1),
-    solidMat(0xa855f7, 0.72)
-  );
-  slash.rotation.z = -0.6;
-
-  g.add(lt, rt, slash);
-  g.position.set(4.5, -1.2, -3.8);
-  g.rotation.set(0.15, -0.44, 0.1);
-  scene.add(g);
-  register(g, { x: 0.002, y: 0.0016 }, { amp: 0.12, speed: 0.5, offset: 1.3 });
-}
-
-// ═══════════════════════════════════════════════════
-// 3. DATABASE STACK   (cyan, top-right)
-// ═══════════════════════════════════════════════════
-{
-  const g = new THREE.Group();
-  const cylGeo = new THREE.CylinderGeometry(0.52, 0.52, 0.2, 32);
-  const ringGeo = new THREE.TorusGeometry(0.52, 0.04, 8, 32);
-
-  for (let i = 0; i < 3; i++) {
-    const body = new THREE.Mesh(cylGeo, solidMat(0x06b6d4, 0.18 + i * 0.1));
-    const cap  = new THREE.Mesh(ringGeo, solidMat(0x22d3ee, 0.6 - i * 0.1));
-    cap.position.y = 0.1;
-    const disc = new THREE.Group();
-    disc.add(body, cap);
-    disc.position.y = i * 0.28;
-    g.add(disc);
+    gsap.to(model.rotation, {
+      y: Math.PI * 2,
+      scrollTrigger: {
+        trigger: section,
+        start: 'top bottom',
+        end: 'bottom top',
+        scrub: 2
+      }
+    });
   }
-
-  g.position.set(3.8, 2.0, -4.2);
-  g.rotation.set(0.1, 0.3, 0.05);
-  scene.add(g);
-  register(g, { x: 0.001, y: 0.003 }, { amp: 0.08, speed: 0.4, offset: 2.2 });
 }
 
 // ═══════════════════════════════════════════════════
-// 4. LARGE TORUS RING   (violet, bottom-left)
+// ROLLING PARTICLE GRID (MINIMALISTIC)
 // ═══════════════════════════════════════════════════
-{
-  const mesh = new THREE.Mesh(
-    new THREE.TorusGeometry(1.35, 0.065, 10, 64),
-    solidMat(0x7c3aed, 0.65)
-  );
-  mesh.position.set(-3.2, -2.2, -5.2);
-  mesh.rotation.set(Math.PI / 3, 0.5, 0.2);
-  scene.add(mesh);
-  register(mesh, { x: 0.0025, y: 0.002, z: 0.001 }, { amp: 0.14, speed: 0.34, offset: 0.9 });
+
+const GRID_COLS = 55;
+const GRID_ROWS = 35;
+const PARTICLE_COUNT = GRID_COLS * GRID_ROWS;
+const MOUSE_REPULSION = 160;
+const DAMPING = 0.92;
+const RETURN_FORCE = 0.015;
+
+// Dynamic variables for scroll-based animation
+let scrollIntensity = 0.5;
+let scrollProgress = 0;
+
+const particlesGeometry = new THREE.BufferGeometry();
+const posArr = new Float32Array(PARTICLE_COUNT * 3);
+const velArr = new Float32Array(PARTICLE_COUNT * 3);
+const targetArr = new Float32Array(PARTICLE_COUNT * 3);
+
+const spacing = 1.2;
+const offsetX = (GRID_COLS * spacing) / 2;
+const offsetY = (GRID_ROWS * spacing) / 2;
+
+for (let i = 0; i < PARTICLE_COUNT; i++) {
+  const col = i % GRID_COLS;
+  const row = Math.floor(i / GRID_COLS);
+
+  const x = col * spacing - offsetX;
+  const y = row * spacing - offsetY;
+  const z = (Math.random() - 0.5) * 2;
+
+  posArr[i * 3]     = targetArr[i * 3]     = x;
+  posArr[i * 3 + 1] = targetArr[i * 3 + 1] = y;
+  posArr[i * 3 + 2] = targetArr[i * 3 + 2] = z;
+
+  velArr[i * 3] = velArr[i * 3 + 1] = velArr[i * 3 + 2] = 0;
 }
 
-// ═══════════════════════════════════════════════════
-// 5. SMALL TORUS RING   (cyan, top-right)
-// ═══════════════════════════════════════════════════
-{
-  const mesh = new THREE.Mesh(
-    new THREE.TorusGeometry(0.62, 0.055, 10, 42),
-    solidMat(0x22d3ee, 0.7)
-  );
-  mesh.position.set(2.2, 3.1, -3.2);
-  mesh.rotation.set(0.4, 0.2, 0);
-  scene.add(mesh);
-  register(mesh, { x: 0.005, y: 0.003, z: 0.002 }, { amp: 0.1, speed: 0.75, offset: 3.5 });
-}
+particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArr, 3));
 
-// ═══════════════════════════════════════════════════
-// 6. WIREFRAME ICOSAHEDRON — "tech globe"  (purple)
-// ═══════════════════════════════════════════════════
-{
-  const geo = new THREE.IcosahedronGeometry(0.78, 1);
+// Custom material for softer particles
+const particleMaterial = new THREE.ShaderMaterial({
+  transparent: true,
+  blending: THREE.AdditiveBlending,
+  depthWrite: false,
+  uniforms: {
+    uColor: { value: COLORS.cyan },
+    uTime: { value: 0 },
+  },
+  vertexShader: `
+    varying vec3 vPosition;
+    void main() {
+      vPosition = position;
+      vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+      // Increased size for visibility
+      gl_PointSize = 6.0 * (30.0 / -mvPosition.z);
+      gl_Position = projectionMatrix * mvPosition;
+    }
+  `,
+  fragmentShader: `
+    uniform vec3 uColor;
+    varying vec3 vPosition;
+    void main() {
+      float dist = length(gl_PointCoord - vec2(0.5));
+      if (dist > 0.5) discard;
+      float strength = 1.0 - (dist * 2.0);
+      strength = pow(strength, 3.0);
+      // Increased brightness (strength * 0.8)
+      gl_FragColor = vec4(uColor, strength * 0.8);
+    }
+  `
+});
 
-  const solid = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({
-    color: 0x04040e,
-    emissive: 0x7c3aed,
-    emissiveIntensity: 0.12,
-    roughness: 0.9,
-    metalness: 0.4,
-    transparent: true,
-    opacity: 0.65,
-  }));
-  solid.add(new THREE.Mesh(geo, wireMat(0xa855f7, 0.45)));
+const particles = new THREE.Points(particlesGeometry, particleMaterial);
+scene.add(particles);
 
-  solid.position.set(-0.8, -3.0, -4.6);
-  scene.add(solid);
-  register(solid, { x: 0.003, y: 0.004 }, { amp: 0.11, speed: 0.48, offset: 1.8 });
-}
-
-// ═══════════════════════════════════════════════════
-// 7. TERMINAL WINDOW   (cyan accent, center-left)
-// ═══════════════════════════════════════════════════
-{
-  const g = new THREE.Group();
-
-  // Body
-  const body = new THREE.Mesh(
-    new THREE.BoxGeometry(1.9, 1.25, 0.06),
-    new THREE.MeshStandardMaterial({
-      color: 0x050515, emissive: 0x06b6d4, emissiveIntensity: 0.07, roughness: 0.7, metalness: 0.5,
-    })
-  );
-  addEdges(body, 0x06b6d4, 0.78);
-
-  // Title bar
-  const titleBar = new THREE.Mesh(
-    new THREE.BoxGeometry(1.9, 0.22, 0.065),
-    new THREE.MeshStandardMaterial({
-      color: 0x080825, emissive: 0x22d3ee, emissiveIntensity: 0.28, roughness: 0.5,
-    })
-  );
-  titleBar.position.set(0, 0.515, 0.003);
-
-  // Traffic-light dots
-  [[0xff5f57, -0.75], [0xffbd2e, -0.62], [0x28ca41, -0.49]].forEach(([color, x]) => {
-    const dot = new THREE.Mesh(
-      new THREE.SphereGeometry(0.045, 8, 8),
-      new THREE.MeshBasicMaterial({ color })
-    );
-    dot.position.set(x, 0.515, 0.09);
-    g.add(dot);
-  });
-
-  // Code lines (horizontal bars)
-  const LC = [0x22d3ee, 0xa855f7, 0x4ade80, 0xfbbf24, 0x22d3ee];
-  const LW = [0.95, 0.60, 1.15, 0.50, 0.82];
-  LC.forEach((c, i) => {
-    const bar = new THREE.Mesh(
-      new THREE.BoxGeometry(LW[i], 0.045, 0.07),
-      new THREE.MeshBasicMaterial({ color: c, transparent: true, opacity: 0.68 })
-    );
-    bar.position.set(-0.48 + LW[i] / 2, 0.29 - i * 0.225, 0.075);
-    g.add(bar);
-  });
-
-  g.add(body, titleBar);
-  g.position.set(-1.8, 0.9, -3.2);
-  g.rotation.set(0.05, 0.24, -0.04);
-  scene.add(g);
-  register(g, { x: 0.001, y: 0.0013 }, { amp: 0.09, speed: 0.43, offset: 2.9 });
-}
-
-// ═══════════════════════════════════════════════════
-// 8. SMALL FLOATING CUBES
-// ═══════════════════════════════════════════════════
-[
-  { pos: [ 2.9, -2.6, -3.5], size: 0.29, em: 0x7c3aed, ei: 0.62 },
-  { pos: [-2.5,  3.2, -5.0], size: 0.22, em: 0x06b6d4, ei: 0.65 },
-  { pos: [-5.5, -1.0, -4.5], size: 0.34, em: 0x7c3aed, ei: 0.55 },
-  { pos: [ 1.2,  0.8, -6.2], size: 0.19, em: 0xa855f7, ei: 0.72 },
-  { pos: [ 5.0,  0.5, -5.5], size: 0.26, em: 0x06b6d4, ei: 0.62 },
-].forEach((d, i) => {
-  const mesh = new THREE.Mesh(
-    new THREE.BoxGeometry(d.size, d.size, d.size),
-    solidMat(d.em, d.ei)
-  );
-  addEdges(mesh, d.em, 0.82);
-  mesh.position.set(...d.pos);
-  mesh.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI);
-  scene.add(mesh);
-  register(
-    mesh,
-    { x: 0.004 + i * 0.001, y: 0.003 + i * 0.0015, z: 0.001 + i * 0.0005 },
-    { amp: 0.07 + i * 0.015, speed: 0.65 + i * 0.1, offset: i * 1.4 }
-  );
+// GSAP Scroll Integration for the Grid
+ScrollTrigger.create({
+  trigger: "body",
+  start: "top top",
+  end: "bottom bottom",
+  onUpdate: (self) => {
+    // Increase wave magnitude and speed on scroll
+    scrollIntensity = 0.5 + self.getVelocity() / 2000;
+    scrollProgress = self.progress;
+    
+    // Smoothly settle back to baseline intensity
+    gsap.to({ val: scrollIntensity }, {
+      val: 0.5,
+      duration: 1.5,
+      onUpdate: function() { scrollIntensity = this.targets()[0].val; }
+    });
+  }
 });
 
 // ═══════════════════════════════════════════════════
-// MOUSE TRACKING
+// INTERACTION
 // ═══════════════════════════════════════════════════
 
-const mouse     = { x: 0, y: 0 };
-const mouseTgt  = { x: 0, y: 0 };
-const camBaseZ  = camera.position.z;
+const mouse = new THREE.Vector3(-1000, -1000, 0);
+const mousePos = new THREE.Vector3();
 
 window.addEventListener('mousemove', (e) => {
-  mouseTgt.x = (e.clientX / window.innerWidth  - 0.5) * 2;
-  mouseTgt.y = (e.clientY / window.innerHeight - 0.5) * 2;
+  const x = (e.clientX / window.innerWidth) * 2 - 1;
+  const y = -(e.clientY / window.innerHeight) * 2 + 1;
+  
+  mousePos.set(x, y, 0.5);
+  mousePos.unproject(camera);
+  const dir = mousePos.sub(camera.position).normalize();
+  const dist = -camera.position.z / dir.z;
+  mouse.copy(camera.position).add(dir.multiplyScalar(dist));
+
+  if (loadedModels.laptop && loadedModels.laptop._lid) {
+     const laptopPosInWorld = loadedModels.laptop.position.clone();
+     const distToLaptop = mouse.distanceTo(laptopPosInWorld);
+     const targetRot = (distToLaptop < 10) ? 1.45 : -0.15;
+     
+     gsap.to(loadedModels.laptop._lid.rotation, {
+       x: targetRot,
+       duration: 0.8,
+       ease: 'elastic.out(1, 0.75)',
+       overwrite: true
+     });
+  }
 }, { passive: true });
 
 // ═══════════════════════════════════════════════════
-// RESIZE
-// ═══════════════════════════════════════════════════
-
-window.addEventListener('resize', () => {
-  const w = window.innerWidth, h = window.innerHeight;
-  camera.aspect = w / h;
-  camera.updateProjectionMatrix();
-  renderer.setSize(w, h);
-}, { passive: true });
-
-// ═══════════════════════════════════════════════════
-// ANIMATION LOOP
+// CORE LOOP
 // ═══════════════════════════════════════════════════
 
 const clock = new THREE.Clock();
 
 function animate() {
   requestAnimationFrame(animate);
-
-  // Pause rendering when tab is hidden (saves GPU/power)
   if (document.hidden) return;
 
-  const t = clock.getElapsedTime();
+  const dt = clock.getDelta();
+  const time = clock.getElapsedTime();
+  particleMaterial.uniforms.uTime.value = time;
 
-  // ── Mouse parallax (smooth lerp)
-  mouse.x += (mouseTgt.x - mouse.x) * 0.038;
-  mouse.y += (mouseTgt.y - mouse.y) * 0.038;
+  const pos = particlesGeometry.attributes.position.array;
 
-  // ── Camera gentle orbit from mouse
-  camera.position.x = mouse.x * 1.5;
-  camera.position.y = -mouse.y * 0.85;
+  for (let i = 0; i < PARTICLE_COUNT; i++) {
+    const idx = i * 3;
 
-  // ── Scroll-based depth parallax
-  const scrollP = window.scrollY / Math.max(1, document.body.scrollHeight - window.innerHeight);
-  camera.position.z = camBaseZ - scrollP * 2.5;
+    // 1. BASE GRID WAVE PATTERN
+    // Soft horizontal/vertical waves that respond to scroll
+    const waveX = Math.sin(time * 0.5 + targetArr[idx] * 0.2) * 0.3 * scrollIntensity;
+    const waveY = Math.cos(time * 0.4 + targetArr[idx+1] * 0.2) * 0.3 * scrollIntensity;
+    const waveZ = Math.sin(time + (targetArr[idx] + targetArr[idx+1]) * 0.1) * 0.8 * scrollIntensity;
 
-  camera.lookAt(0, 0, 0);
+    // 2. MOUSE INTERACTION (Ripple/Liquid)
+    const dx = pos[idx] - mouse.x;
+    const dy = pos[idx + 1] - mouse.y;
+    const dz = pos[idx + 2] - mouse.z;
+    const distSq = dx * dx + dy * dy + dz * dz + 0.1;
+    const dist = Math.sqrt(distSq);
 
-  // ── Animate each object
-  objects.forEach(obj => {
-    obj.mesh.rotation.x += obj.rotX;
-    obj.mesh.rotation.y += obj.rotY;
-    obj.mesh.rotation.z += obj.rotZ;
+    if (dist < 8) {
+      const forceMultiplier = (MOUSE_REPULSION / distSq) * 0.004;
+      velArr[idx]     += dx * forceMultiplier;
+      velArr[idx + 1] += dy * forceMultiplier;
+      velArr[idx + 2] += dz * forceMultiplier;
+    }
 
-    // Sinusoidal bob (up-down) + sway (left-right)
-    const bob  = Math.sin(t * obj.bobSpeed + obj.bobOffset) * obj.bobAmp;
-    const sway = Math.cos(t * obj.bobSpeed * 0.7 + obj.bobOffset + 0.8) * obj.bobAmp * 0.35;
-    obj.mesh.position.y = obj._initY + bob;
-    obj.mesh.position.x = obj._initX + sway;
-  });
+    // 3. PHYSICS: Spring Back to animated target
+    const tx = (targetArr[idx] + waveX) - pos[idx];
+    const ty = (targetArr[idx + 1] + waveY) - pos[idx + 1];
+    const tz = (targetArr[idx + 2] + waveZ) - pos[idx + 2];
+    
+    velArr[idx]     += tx * RETURN_FORCE;
+    velArr[idx + 1] += ty * RETURN_FORCE;
+    velArr[idx + 2] += tz * RETURN_FORCE;
 
+    // Apply and Damp
+    pos[idx]     += velArr[idx];
+    pos[idx + 1] += velArr[idx + 1];
+    pos[idx + 2] += velArr[idx + 2];
+    
+    velArr[idx]     *= DAMPING;
+    velArr[idx + 1] *= DAMPING;
+    velArr[idx + 2] *= DAMPING;
+
+    // Subtle parallax shift based on scroll
+    pos[idx + 1] -= scrollProgress * 0.05; 
+  }
+
+  particlesGeometry.attributes.position.needsUpdate = true;
   renderer.render(scene, camera);
 }
 
 // ═══════════════════════════════════════════════════
-// START — deferred until after page load / loader
+// SETUP
 // ═══════════════════════════════════════════════════
 
-function startScene() {
-  clock.start();
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+}, { passive: true });
+
+function start() {
+  loadModels();
   animate();
 }
 
 if (document.readyState === 'complete') {
-  requestAnimationFrame(startScene);
+  start();
 } else {
-  window.addEventListener('load', () => requestAnimationFrame(startScene), { once: true });
+  window.addEventListener('load', start);
 }

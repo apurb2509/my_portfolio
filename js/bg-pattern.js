@@ -35,7 +35,7 @@
         top: -20%;
         right: -15%;
         border-radius: 50%;
-        background: radial-gradient(circle, rgba(124,58,237,0.055) 0%, transparent 65%);
+        background: radial-gradient(circle, rgba(124,58,237,0.025) 0%, transparent 65%);
         animation: orbDrift1 22s ease-in-out infinite alternate;
         will-change: transform;
       }
@@ -47,7 +47,7 @@
         bottom: -15%;
         left: -10%;
         border-radius: 50%;
-        background: radial-gradient(circle, rgba(6,182,212,0.045) 0%, transparent 65%);
+        background: radial-gradient(circle, rgba(6,182,212,0.02) 0%, transparent 65%);
         animation: orbDrift2 28s ease-in-out infinite alternate;
         will-change: transform;
       }
@@ -59,7 +59,7 @@
         top: 40%;
         left: 40%;
         border-radius: 50%;
-        background: radial-gradient(circle, rgba(168,85,247,0.035) 0%, transparent 65%);
+        background: radial-gradient(circle, rgba(168,85,247,0.015) 0%, transparent 65%);
         animation: orbDrift3 18s ease-in-out infinite alternate;
         will-change: transform;
       }
